@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>امتحان النمذجة للهدفين أ و ب</title>
+    <title>امتحان النمذجة للهدفين أ و ب - مع جولة تصحيح الأخطاء</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -19,13 +19,43 @@
             direction: ltr;
             text-align: left;
         }
+        
+        @keyframes bounce-slow {
+            0%,
+            100% {
+                transform: translateY(-5%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: none;
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        
+        .animate-bounce-slow {
+            animation: bounce-slow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(52, 211, 153, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(52, 211, 153, 0.8);
+            }
+        }
+        
+        .celebrate-glow {
+            animation: pulse-glow 2s infinite;
+        }
     </style>
 </head>
 
 <body class="flex flex-col min-h-screen">
 
     <!-- Header Section -->
-    <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 py-4 px-4 sm:px-6 shadow-md">
+    <header class="bg-slate-900/85 backdrop-blur border-b border-slate-800 py-4 px-4 sm:px-6 shadow-md">
         <div class="max-w-4xl mx-auto text-center">
             <h1 class="text-lg sm:text-xl font-bold text-cyan-400">امتحان النمذجة للهدفين أ و ب</h1>
             <p class="text-xs text-slate-400 mt-1">الصف العاشر المستوى الثاني | تكنولوجيا المعلومات المستوى 2</p>
@@ -38,7 +68,7 @@
 
             <!-- Welcome View -->
             <div id="welcome-view" class="p-6 sm:p-8 text-center space-y-6">
-                <div class="inline-block p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 mb-2">
+                <div class="inline-block p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 mb-2 animate-bounce-slow">
                     <svg class="w-10 h-10 sm:w-12 sm:h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                     </svg>
@@ -71,14 +101,11 @@
             <!-- Quiz Form View -->
             <div id="quiz-view" class="hidden p-4 sm:p-8 space-y-8">
                 <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 pb-4 sticky top-0 bg-slate-900/95 backdrop-blur z-10 py-2 gap-2">
-                    <span class="text-xs font-semibold text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">امتحان النمذجة (10 للهدف أ + 10 منوعة للهدف ب)</span>
-                    <span class="text-xs text-rose-400 bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20 font-bold">تنبيه: يجب الإجابة على جميع الأسئلة</span>
+                    <span id="quiz-title-tag" class="text-xs font-semibold text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">امتحان النمذجة (المحاولة الأولى)</span>
+                    <span class="text-xs text-rose-400 bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20 font-bold">تنبيه: يجب الإجابة على الأسئلة</span>
                 </div>
 
-                <!-- Form container for all questions -->
-                <div id="questions-form-container" class="space-y-8">
-                    <!-- Dynamic Questions injected here -->
-                </div>
+                <div id="questions-form-container" class="space-y-8"></div>
 
                 <div class="pt-6 border-t border-slate-800 text-center">
                     <button onclick="submitExamForm()" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-slate-950 font-black rounded-xl text-base transition shadow-lg shadow-cyan-500/20">
@@ -89,14 +116,14 @@
 
             <!-- Result View -->
             <div id="result-view" class="hidden p-6 sm:p-8 text-center space-y-6">
-                <div class="inline-block p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 mb-2">
-                    <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <div class="inline-block p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 mb-2 celebrate-glow">
+                    <svg class="w-12 h-12 mx-auto animate-bounce-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
                     </svg>
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">نتائج الاختبار</h3>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">🎉 نتيجة الاختبار 🎉</h3>
 
-                <div class="bg-slate-800/60 border border-slate-700/60 p-6 rounded-2xl max-w-sm mx-auto space-y-4">
+                <div class="bg-slate-800/60 border border-slate-700/60 p-6 rounded-2xl max-w-sm mx-auto space-y-4 shadow-xl">
                     <p class="text-sm text-slate-300">اسم الطالبة: <span id="res-student-name" class="font-bold text-cyan-400"></span></p>
                     <div class="border-t border-slate-700 pt-3 space-y-2">
                         <p class="text-xs text-slate-400 mb-1">سجل المحاولات والنتائج:</p>
@@ -104,16 +131,9 @@
                     </div>
                 </div>
 
-                <!-- Mistakes Breakdown Container -->
-                <div id="mistakes-container" class="text-right space-y-4 max-w-xl mx-auto hidden pt-4 border-t border-slate-800">
-                    <h4 class="text-base font-bold text-amber-400 text-center">جولة تصحيح الأخطاء والتوضيح العلمي:</h4>
-                    <div id="mistakes-list" class="space-y-4 max-h-80 overflow-y-auto pr-2"></div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row justify-center gap-3">
-                    <button onclick="restartExam()" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold rounded-xl transition shadow-lg">
-                        إعادة الاختبار (محاولة جديدة)
-                    </button>
+                <!-- Action Buttons Container -->
+                <div id="result-actions" class="flex flex-wrap justify-center gap-3 pt-4 border-t border-slate-800">
+                    <!-- Dynamic Buttons will be injected here (Correction round button if attempt 1, or Restart/Exit if attempt 2) -->
                 </div>
             </div>
 
@@ -121,418 +141,358 @@
     </main>
 
     <!-- Footer Section -->
-    <footer class="bg-slate-900/80 backdrop-blur border-t border-slate-800 py-3 text-center text-xs text-slate-400">
+    <footer class="bg-slate-900/85 backdrop-blur border-t border-slate-800 py-3 text-center text-xs text-slate-400">
         امتحان النمذجة للهدفين أ و ب | اعداد المهندس: ابراهيم المدادحة | بإشراف المعلمة: نسرين قنديل
     </footer>
 
     <script>
-        const questionsData = [
+        const originalQuestionsData = [
             // ==================== الهدف (أ): مفاهيم النمذجة وهياكل البيانات والقرارات (10 أسئلة) ====================
             {
+                id: 1,
                 goal: "الهدف (أ)",
                 question: "ما المقصود بعملية نمذجة البيانات (Data Modelling) في نظم معلومات الجداول الإلكترونية؟",
                 options: [{
                     text: "إنشاء تمثيل هيكلي ومنظم للبيانات والعلاقات بينها لتسهيل التحليل واتخاذ القرار",
-                    isCorrect: true,
-                    rationale: "النمذجة تبني هيكلاً يوضح تدفق وعلاقات البيانات."
+                    isCorrect: true
                 }, {
                     text: "مجرد طباعة التقارير الورقية اليومية للموظفين",
-                    isCorrect: false,
-                    rationale: "هذه وظيفة طباعة وليست نمذجة."
+                    isCorrect: false
                 }, {
                     text: "حذف كافة قواعد البيانات القديمة من النظام",
-                    isCorrect: false,
-                    rationale: "النمذجة تهدف للبناء والتنظيم وليس الحذف."
+                    isCorrect: false
                 }, {
                     text: "شراء أجهزة حاسوب جديدة للشركة",
-                    isCorrect: false,
-                    rationale: "هذا استثمار في المكونات المادية."
+                    isCorrect: false
                 }]
             }, {
+                id: 2,
                 goal: "الهدف (أ)",
                 question: "أي مما يلي يُعد المكون الأساسي لبرمجيات جداول البيانات لتخزين البيانات ومعالجتها؟",
                 options: [{
                     text: "الخلايا (Cells) والصفوف والأعمدة داخل ورقة العمل",
-                    isCorrect: true,
-                    rationale: "جداول البيانات تقوم على تنظيم البيانات في خلايا وصفوف وأعمدة."
+                    isCorrect: true
                 }, {
                     text: "لوحة المفاتيح والماوس فقط",
-                    isCorrect: false,
-                    rationale: "هذه مكونات مادية أدخلية وليست برمجية الجداول."
+                    isCorrect: false
                 }, {
                     text: "كابلات الربط الشبكي (UTP)",
-                    isCorrect: false,
-                    rationale: "تستخدم لربط شبكات الحاسوب المحلية LAN."
+                    isCorrect: false
                 }, {
                     text: "خوادم السحابة الحسابية الكبرى",
-                    isCorrect: false,
-                    rationale: "بنية تحتية وليست المكون الأساسي للجداول."
+                    isCorrect: false
                 }]
             }, {
+                id: 3,
                 goal: "الهدف (أ)",
                 question: "كيف تساهم جداول البيانات في دعم اتخاذ القرار الإداري في المؤسسات؟",
                 options: [{
                     text: "من خلال إجراء الحسابات المعقدة، تحليل الاتجاهات، ورسم الرسوم البيانية التوضيحية",
-                    isCorrect: true,
-                    rationale: "الرسوم البيانية وتحليل البيانات تساعد المديرين على اتخاذ قرارات مبنية على أرقام دقيقة."
+                    isCorrect: true
                 }, {
                     text: "عبر إرسال رسائل بريد عشوائية للعملاء",
-                    isCorrect: false,
-                    rationale: "هذا لا علاقة له باتخاذ القرار."
+                    isCorrect: false
                 }, {
                     text: "عن طريق تبريد أجهزة الحواسيب مركزياً",
-                    isCorrect: false,
-                    rationale: "هذا دور أنظمة التكييف وإدارة المباني."
+                    isCorrect: false
                 }, {
                     text: "من خلال طباعة الفواتير يدوياً بالآلة الكاتبة",
-                    isCorrect: false,
-                    rationale: "طريقة تقليدية لا تعتمد على الجداول الذكية."
+                    isCorrect: false
                 }]
             }, {
+                id: 4,
                 goal: "الهدف (أ)",
                 question: "ما هي الفائدة الرئيسية من استخدام الرسوم البيانية (Charts) في برامج جداول البيانات؟",
                 options: [{
                     text: "تسهيل البحث عن الاتجاهات والأنماط التاريخية والمالية بوضوح بصري",
-                    isCorrect: true,
-                    rationale: "الرسوم البيانية تترجم الأرقام إلى مرئيات تسهل استقراء الاتجاهات."
+                    isCorrect: true
                 }, {
                     text: "زيادة حجم الملفات وصعوبة مشاركتها",
-                    isCorrect: false,
-                    rationale: "الرسوم تصغر الفهم ولا تصعبه."
+                    isCorrect: false
                 }, {
                     text: "منع تشفير البيانات الحساسة تلقائياً",
-                    isCorrect: false,
-                    rationale: "الرسوم لا علاقة لها بالتشفير."
+                    isCorrect: false
                 }, {
                     text: "توفير طاقة الكهرباء في المكاتب",
-                    isCorrect: false,
-                    rationale: "ليس لها دور في استهلاك الطاقة."
+                    isCorrect: false
                 }]
             }, {
+                id: 5,
                 goal: "الهدف (أ)",
                 question: "أي من العوامل الآتية يتم دراستها عادة عند نمذجة بيانات المبيعات في الشركات التجارية؟",
                 options: [{
                     text: "اتجاهات المبيعات، الأرباح، التكاليف، وهوامش الربح المستقبلية",
-                    isCorrect: true,
-                    rationale: "دراسة العوامل المالية والمبيعات هي الأساس في النمذجة الاقتصادية."
+                    isCorrect: true
                 }, {
                     text: "نوع لوحة المفاتيح المستخدمة في المكتب",
-                    isCorrect: false,
-                    rationale: "تعتبر من المكونات المادية وليس البيانات المالية."
+                    isCorrect: false
                 }, {
                     text: "سرعة مروحة المعالج في حاسوب الموظف",
-                    isCorrect: false,
-                    rationale: "مواصفات تقنية بحتة وليست بيانات أعمال."
+                    isCorrect: false
                 }, {
                     text: "عدد ساعات غياب موظف الحراسة",
-                    isCorrect: false,
-                    rationale: "تفصيل إداري فرعي مقارنة بالمبيعات."
+                    isCorrect: false
                 }]
             }, {
+                id: 6,
                 goal: "الهدف (أ)",
                 question: "ما هو الدور الذي تلعبه البيانات التاريخية داخل نماذج البيانات في المؤسسات؟",
                 options: [{
                     text: "استخدامها للتنبؤ بالاتجاهات المستقبلية والتخطيط المالي السليم",
-                    isCorrect: true,
-                    rationale: "البيانات السابقة تبنى عليها النماذج للتنبؤ بما سيحدث."
+                    isCorrect: true
                 }, {
                     text: "إتلافها فوراً لعدم الحاجة إليها",
-                    isCorrect: false,
-                    rationale: "إتلافها يفقد الشركة القدرة على التحليل."
+                    isCorrect: false
                 }, {
                     text: "تخزينها في أوراق مطبوعة فقط",
-                    isCorrect: false,
-                    rationale: "الأنظمة الحديثة تعتمد الحوسبة الرقمية."
+                    isCorrect: false
                 }, {
                     text: "استخدامها لكتابة رسائل شخصية للموظفين",
-                    isCorrect: false,
-                    rationale: "غرض غير مهني."
+                    isCorrect: false
                 }]
             }, {
+                id: 7,
                 goal: "الهدف (أ)",
                 question: "كيف تؤثر جداول البيانات على كفاءة الموظفين الإداريين في الشركات؟",
                 options: [{
                     text: "زيادة الإنتاجية عبر أتمتة العمليات الحسابية وتجنب الأخطاء اليدوية",
-                    isCorrect: true,
-                    rationale: "الجداول تحسب النتائج آلياً وترفع الإنتاجية بشكل ملحوظ."
+                    isCorrect: true
                 }, {
                     text: "إبطاء سرعة إنجاز المهام المالية",
-                    isCorrect: false,
-                    rationale: "العكس تماماً، هي تسرع الإنجاز."
+                    isCorrect: false
                 }, {
                     text: "إلغاء الحاجة لبرامج معالجة النصوص نهائياً",
-                    isCorrect: false,
-                    rationale: "لكل برنامج تخصص مختلف."
+                    isCorrect: false
                 }, {
                     text: "تقليل مساحة تخزين الحواسيب",
-                    isCorrect: false,
-                    rationale: "لا علاقة مباشرة بمساحة التخزين."
+                    isCorrect: false
                 }]
             }, {
+                id: 8,
                 goal: "الهدف (أ)",
                 question: "ماذا يقصد بعملية تنظيم وترتيب مدخلات البيانات في جداول الأنشطة التجارية؟",
                 options: [{
                     text: "ترتيب القيم والأرقام والنصوص في صفوف والأعمدة ليسهل استرجاعها ومعالجتها",
-                    isCorrect: true,
-                    rationale: "الترتيب والهيكلة هما جوهر تنظيم البيانات للتحليل."
+                    isCorrect: true
                 }, {
                     text: "نسخ الملفات عشوائياً على سطح المكتب",
-                    isCorrect: false,
-                    rationale: "هذا يخلق فوضى ولا ينظم البيانات."
+                    isCorrect: false
                 }, {
                     text: "إخفاء الأسعار عن الإدارة العليا",
-                    isCorrect: false,
-                    rationale: "ينافي غرض العمل الإداري."
+                    isCorrect: false
                 }, {
                     text: "تحويل جميع البيانات إلى رسوم متحركة",
-                    isCorrect: false,
-                    rationale: "غير دقيق وغير عملي."
+                    isCorrect: false
                 }]
             }, {
+                id: 9,
                 goal: "الهدف (أ)",
                 question: "ماذا يقصد بنمذجة \"ماذا لو\" (What-if Modelling) في برامج جداول البيانات؟",
                 options: [{
                     text: "طريقة تستخدم للتنبؤ بتأثير التغييرات المحتملة في المستقبل مثل خفض الأسعار",
-                    isCorrect: true,
-                    rationale: "نمذجة ماذا لو تختبر السيناريوهات المتوقعة لمعرفة تأثيرها على الأرباح."
+                    isCorrect: true
                 }, {
                     text: "طريقة لإلغاء وتدمير الملفات الضارة في النظام",
-                    isCorrect: false,
-                    rationale: "ليست أداة لحذف الملفات."
+                    isCorrect: false
                 }, {
                     text: "تقنية مخصصة لتصميم مواقع الويب التفاعلية",
-                    isCorrect: false,
-                    rationale: "تخصص مختلف يتعلق بتطوير الويب."
+                    isCorrect: false
                 }, {
                     text: "طريقة لربط أجهزة الراوتر بالإنترنت المنزلي",
-                    isCorrect: false,
-                    rationale: "خاص بشبكات الاتصالات."
+                    isCorrect: false
                 }]
             }, {
+                id: 10,
                 goal: "الهدف (أ)",
                 question: "ما العلاقة بين البيانات المدخلة (Input Data) وصحة مخرجات النمذجة في جداول البيانات؟",
                 options: [{
                     text: "مدخلات دقيقة وصحيحة تؤدي إلى مخرجات وقرارات موثوقة (مبدأ البيانات الصحيحة تعطي نتائج صحيحة)",
-                    isCorrect: true,
-                    rationale: "صحة النموذج تعتمد كلياً على دقة وموثوقية البيانات المدخلة إليه."
+                    isCorrect: true
                 }, {
                     text: "المدخلات السيئة لا تؤثر أبداً على النتائج النهائية للنموذج",
-                    isCorrect: false,
-                    rationale: "الخطأ في المدخلات يؤدي بالضرورة لخطأ في المخرجات."
+                    isCorrect: false
                 }, {
                     text: "المدخلات المالية مستقلة تماماً عن المخرجات الحسابية",
-                    isCorrect: false,
-                    rationale: "المخرجات نتاج مباشر للمدخلات."
+                    isCorrect: false
                 }, {
                     text: "لا توجد أي علاقة بين نوع المدخلات ودقة المخرجات",
-                    isCorrect: false,
-                    rationale: "علاقة ارتباط وثيقة وشرطية."
+                    isCorrect: false
                 }]
             },
 
             // ==================== الهدف (ب): لوحات البيانات وجداول البيانات والمفاهيم المنوعة (5 أسئلة) ====================
             {
+                id: 11,
                 goal: "الهدف (ب)",
                 question: "ما هو المقصود بلوحة البيانات (Dashboard) في سياق برامج جداول البيانات والتقارير الإدارية؟",
                 options: [{
                     text: "واجهة مرئية تجمع وتعرض أهم مؤشرات الأداء والبيانات الرئيسية في مكان واحد لتسهيل المتابعة",
-                    isCorrect: true,
-                    rationale: "لوحة البيانات تعرض ملخصاً بصرياً سريعاً لأهم المؤشرات."
+                    isCorrect: true
                 }, {
                     text: "مجلد لحفظ صور الخلفيات الخاصة بسطح المكتب",
-                    isCorrect: false,
-                    rationale: "لا علاقة لها بخلفيات نظام التشغيل."
+                    isCorrect: false
                 }, {
                     text: "جهاز هاردوير يستخدم لتوصيل شاشات العرض الكبرى",
-                    isCorrect: false,
-                    rationale: "ليست قطعة عتادية."
+                    isCorrect: false
                 }, {
                     text: "قائمة لإعدادات اللغة واللوحة المفاتيح",
-                    isCorrect: false,
-                    rationale: "تتعلق بالنظام وليست بالتقارير."
+                    isCorrect: false
                 }]
             }, {
+                id: 12,
                 goal: "الهدف (ب)",
                 question: "كيف تساهم لوحات البيانات التفاعلية في تسهيل عمل الإدارة العليا داخل المؤسسات؟",
                 options: [{
                     text: "عبر إعطاء نظرة شاملة ولحظية على حالة العمل والمؤشرات الحيوية دون الحاجة لتفحص الجداول الكبيرة",
-                    isCorrect: true,
-                    rationale: "تختصر الوقت وتقدم نظرة شاملة وسريعة لمتخذ القرار."
+                    isCorrect: true
                 }, {
                     text: "من خلال طباعة المستندات بشكل يدوي وبطيء",
-                    isCorrect: false,
-                    rationale: "اللوحات رقمية وتفاعلية وليست ورقية بطيئة."
+                    isCorrect: false
                 }, {
                     text: "عبر إخفاء نتائج الأرباح والخسائر عن المديرين",
-                    isCorrect: false,
-                    rationale: "الهدف الأساسي هو إظهارها بوضوح."
+                    isCorrect: false
                 }, {
                     text: "عن طريق زيادة استهلاك الطاقة الكهربائية للخوادم",
-                    isCorrect: false,
-                    rationale: "ليس لها علاقة واضحة باستهلاك الطاقة."
+                    isCorrect: false
                 }]
             }, {
+                id: 13,
                 goal: "الهدف (ب)",
                 question: "أي من العناصر التالية يُعد أساسياً عند تصميم لوحة بيانات (Dashboard) فعالة ومفيدة للمستخدمين؟",
                 options: [{
                     text: "التركيز على المؤشرات الحيوية الهامة، ووضوح الرسوم البيانية، وسقوط التفاصيل الزائدة",
-                    isCorrect: true,
-                    rationale: "التصميم الفعال يعرض أهم المؤشرات بوضوح وبساطة."
+                    isCorrect: true
                 }, {
                     text: "وضع أكبر عدد ممكن من الأرقام المتداخلة دون ترتيب",
-                    isCorrect: false,
-                    rationale: "هذا يسبب تشتتاً للمستخدم ويخفي المعلومة."
+                    isCorrect: false
                 }, {
                     text: "استخدام ألوان صاخبة ومعقدة تغطي على البيانات",
-                    isCorrect: false,
-                    rationale: "الألوان الصاخبة تعيق القراءة السريعة."
+                    isCorrect: false
                 }, {
                     text: "الاعتماد على النصوص الطويلة والفقرات الإنشائية فقط",
-                    isCorrect: false,
-                    rationale: "اللوحات تعتمد على المرئيات والمؤشرات وليس النصوص الطويلة."
+                    isCorrect: false
                 }]
             }, {
+                id: 14,
                 goal: "الهدف (ب)",
                 question: "ما هي ميزة استخدام الجداول الإلكترونية مقارنة بدفاتر الأستاذ الورقية التقليدية؟",
                 options: [{
                     text: "إمكانية تحديث القيم وإعادة حساب النتائج تلقائياً دون إعادة كتابة الجدول",
-                    isCorrect: true,
-                    rationale: "المرونة والحساب التلقائي عند تغيير المدخلات ميزة كبرى."
+                    isCorrect: true
                 }, {
                     text: "حاجة تطلب وقتاً أطول في المسح اليدوي",
-                    isCorrect: false,
-                    rationale: "الدفاتر الورقية هي التي تتطلب مسحاً يدوياً."
+                    isCorrect: false
                 }, {
                     text: "استحالة تعديل الأرقام بعد إدخالها",
-                    isCorrect: false,
-                    rationale: "الجداول قابلة للتعديل بسهولة."
+                    isCorrect: false
                 }, {
                     text: "انعدام الحاجة لوجود حواسيب أو برمجيات",
-                    isCorrect: false,
-                    rationale: "الجداول تتطلب حواسيب وبرامج مخصصة."
+                    isCorrect: false
                 }]
             }, {
+                id: 15,
                 goal: "الهدف (ب)",
                 question: "لماذا تُعتبر برامج جداول البيانات أداة رئيسية في أقسام الحسابات والمالية؟",
                 options: [{
                     text: "لقدرتها الفائقة على تتبع المصروفات، إعداد الموازنات، وحساب الأرباح بدقة",
-                    isCorrect: true,
-                    rationale: "قسم الحسابات يعتمد عليها كلياً في المعاملات المالية والميزانيات."
+                    isCorrect: true
                 }, {
                     text: "لتصميم شعارات الشركات وتعديل الصور",
-                    isCorrect: false,
-                    rationale: "هذا من اختصاص برامج تحرير الرسوم والغرافيك."
+                    isCorrect: false
                 }, {
                     text: "لإدارة شبكات الاتصالات السلكية واللاسلكية",
-                    isCorrect: false,
-                    rationale: "من اختصاص مهندسي الشبكات والموجهات."
+                    isCorrect: false
                 }, {
                     text: "لتشغيل أجهزة الروبوت في خطوط الإنتاج",
-                    isCorrect: false,
-                    rationale: "من اختصاص أنظمة التصنيع المحوسب MRP."
+                    isCorrect: false
                 }]
             },
 
-            // ==================== الهدف (ب): الدوال والصيغ البرمجية والاقترانات (5 أسئلة - من اليسار لليمين مثل الإكسل) ====================
+            // ==================== الهدف (ب): الدوال والصيغ البرمجية والاقترانات (5 أسئلة - يسار ليمين) ====================
             {
+                id: 16,
                 goal: "الهدف (ب)",
                 question: "ما هي الدالة (Function) المستخدمة في برنامج جداول البيانات لإيجاد المجموع الكلي للقيم في النطاق <span class=\"ltr-text inline-block font-mono text-cyan-300\">(B2:B10)</span>؟",
                 options: [{
                     text: '<span class="ltr-text inline-block font-mono">=SUM(B2:B10)</span>',
-                    isCorrect: true,
-                    rationale: "دالة SUM تستخدم لجمع القيم الرقمية في النطاقات المحددة."
+                    isCorrect: true
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=AVERAGE(B2:B10)</span>',
-                    isCorrect: false,
-                    rationale: "AVERAGE تستخدم لحساب المعدل المتوسط."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=MAX(B2:B10)</span>',
-                    isCorrect: false,
-                    rationale: "MAX تستخدم لإيجاد القيمة الكبرى."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=COUNT(B2:B10)</span>',
-                    isCorrect: false,
-                    rationale: "COUNT تستخدم لعد الخلايا الرقمية."
+                    isCorrect: false
                 }]
             }, {
+                id: 17,
                 goal: "الهدف (ب)",
                 question: "ما هي الصيغة الصحيحة تماماً لكتابة دالة حساب المتوسط الحسابي (المعدل) للقيم في النطاق <span class=\"ltr-text inline-block font-mono text-cyan-300\">(C2:C12)</span>؟",
                 options: [{
                     text: '<span class="ltr-text inline-block font-mono">=AVERAGE(C2:C12)</span>',
-                    isCorrect: true,
-                    rationale: "الصيغة الصحيحة تبدأ بعلامة المساواة ثم اسم الدالة والنطاق بين قوسين."
+                    isCorrect: true
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">AVERAGE(C2:C12)=</span>',
-                    isCorrect: false,
-                    rationale: "علامة المساواة يجب أن تكون في بداية الصيغة وليست في النهاية."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">SUM(C2:C12)</span>',
-                    isCorrect: false,
-                    rationale: "هذه دالة المجموع وليس المتوسط."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=AVG(C2:C12)</span>',
-                    isCorrect: false,
-                    rationale: "الاسم المعتمد في البرامج هو AVERAGE وليس AVG."
+                    isCorrect: false
                 }]
             }, {
+                id: 18,
                 goal: "الهدف (ب)",
                 question: "أي من الدوال الآتية تستخدم لإيجاد أعلى قيمة رقمية ضمن نطاق محدد من الخلايا في ورقة العمل؟",
                 options: [{
                     text: '<span class="ltr-text inline-block font-mono">=MAX()</span>',
-                    isCorrect: true,
-                    rationale: "دالة MAX تعيد أكبر قيمة رقمية في النطاق المعطى."
+                    isCorrect: true
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=MIN()</span>',
-                    isCorrect: false,
-                    rationale: "دالة MIN تعيد أدنى أو أقل قيمة."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=SUM()</span>',
-                    isCorrect: false,
-                    rationale: "دالة SUM للجمع."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=IF()</span>',
-                    isCorrect: false,
-                    rationale: "دالة IF دالة شرطية منطقية."
+                    isCorrect: false
                 }]
             }, {
+                id: 19,
                 goal: "الهدف (ب)",
                 question: "ما هي الصيغة الصحيحة لاستخدام الدالة الشرطية (IF) لفحص ما إذا كانت القيمة في الخلية <span class=\"ltr-text inline-block font-mono text-cyan-300\">A1</span> أكبر من أو تساوي 50؟",
                 options: [{
                     text: '<span class="ltr-text inline-block font-mono">=IF(A1>=50, "ناجح", "راسب")</span>',
-                    isCorrect: true,
-                    rationale: "الصيغة الصحيحة تبدأ بالشرط ثم النتيجة عند التحقق ثم النتيجة عند عدم التحقق."
+                    isCorrect: true
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=IF("ناجح", A1>=50)</span>',
-                    isCorrect: false,
-                    rationale: "ترتيب المعاملات غير صحيح."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">IF(A1>50)</span>',
-                    isCorrect: false,
-                    rationale: "تفتقد لعلامة المساواة في البداية والمعاملات المطلوبة."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=CONDITION(A1>=50)</span>',
-                    isCorrect: false,
-                    rationale: "الدالة المعتمدة هي IF وليست CONDITION."
+                    isCorrect: false
                 }]
             }, {
+                id: 20,
                 goal: "الهدف (ب)",
                 question: "ما هي الدالة المستخدمة لحساب عدد الخلايا التي تحتوي على قيم رقمية فقط ضمن نطاق معين؟",
                 options: [{
                     text: '<span class="ltr-text inline-block font-mono">=COUNT()</span>',
-                    isCorrect: true,
-                    rationale: "دالة COUNT تعد الخلايا الرقمية."
+                    isCorrect: true
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=COUNTA()</span>',
-                    isCorrect: false,
-                    rationale: "COUNTA تعد كافة الخلايا غير الفارغة (نصية ورقمية)."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=SUM()</span>',
-                    isCorrect: false,
-                    rationale: "تستخدم للجمع وليست للعد."
+                    isCorrect: false
                 }, {
                     text: '<span class="ltr-text inline-block font-mono">=MAX()</span>',
-                    isCorrect: false,
-                    rationale: "تستخدم لإيجاد القيمة الكبرى."
+                    isCorrect: false
                 }]
             }
         ];
@@ -540,6 +500,8 @@
         let activeQuestions = [];
         let studentName = "";
         let studentAttempts = [];
+        let incorrectQuestionIds = []; // لحفظ معرفات الأسئلة الخاطئة في المحاولة الأولى
+        let currentMode = "first_attempt"; // "first_attempt" أو "correction_round"
 
         function shuffleArray(array) {
             let currentIndex = array.length,
@@ -561,8 +523,13 @@
             studentName = nameInput;
             document.getElementById("res-student-name").innerText = studentName;
             studentAttempts = [];
+            incorrectQuestionIds = [];
+            currentMode = "first_attempt";
 
-            activeQuestions = JSON.parse(JSON.stringify(questionsData));
+            document.getElementById("quiz-title-tag").innerText = "امتحان النمذجة (المحاولة الأولى - 20 سؤالاً)";
+
+            // تجهيز الأسئلة كاملة مع خلطها وخلط الخيارات
+            activeQuestions = JSON.parse(JSON.stringify(originalQuestionsData));
             shuffleArray(activeQuestions);
             activeQuestions.forEach(q => {
                 shuffleArray(q.options);
@@ -650,62 +617,112 @@
                 return;
             }
 
-            let correctCount = 0;
-            let mistakes = [];
+            if (currentMode === "first_attempt") {
+                // تقييم المحاولة الأولى
+                let correctCount = 0;
+                incorrectQuestionIds = [];
 
-            activeQuestions.forEach((q, i) => {
-                const radios = document.getElementsByName(`question_${i}`);
-                let selectedOptIdx = null;
-                for (let r of radios) {
-                    if (r.checked) {
-                        selectedOptIdx = parseInt(r.value);
-                        break;
+                activeQuestions.forEach((q, i) => {
+                    const radios = document.getElementsByName(`question_${i}`);
+                    let selectedOptIdx = null;
+                    for (let r of radios) {
+                        if (r.checked) {
+                            selectedOptIdx = parseInt(r.value);
+                            break;
+                        }
                     }
-                }
 
-                if (selectedOptIdx !== null && q.options[selectedOptIdx].isCorrect) {
-                    correctCount++;
-                } else {
-                    const correctOpt = q.options.find(o => o.isCorrect);
-                    mistakes.push({
-                        goal: q.goal,
-                        question: q.question,
-                        correctText: correctOpt ? correctOpt.text : "",
-                        rationale: correctOpt ? correctOpt.rationale : ""
-                    });
-                }
-            });
+                    if (selectedOptIdx !== null && q.options[selectedOptIdx].isCorrect) {
+                        correctCount++;
+                    } else {
+                        incorrectQuestionIds.push(q.id);
+                    }
+                });
 
-            const totalScore = correctCount * 4;
-            studentAttempts.push(totalScore);
+                const score1 = correctCount * 4;
+                studentAttempts.push(score1);
 
+                displayResultsView();
+
+            } else if (currentMode === "correction_round") {
+                // تقييم جولة تصحيح الأخطاء فقط
+                let correctInCorrection = 0;
+
+                activeQuestions.forEach((q, i) => {
+                    const radios = document.getElementsByName(`question_${i}`);
+                    let selectedOptIdx = null;
+                    for (let r of radios) {
+                        if (r.checked) {
+                            selectedOptIdx = parseInt(r.value);
+                            break;
+                        }
+                    }
+
+                    if (selectedOptIdx !== null && q.options[selectedOptIdx].isCorrect) {
+                        correctInCorrection++;
+                    }
+                });
+
+                // المحاولة الثانية تحسب بتعديل الأخطاء التي تم تصحيحها
+                // الدرجة الأولى + (عدد الأسئلة الصحيحة في التصحيح * 4) بحيث لا تتجاوز 80
+                const previousScore = studentAttempts[0];
+                const addedScore = correctInCorrection * 4;
+                let score2 = previousScore + addedScore;
+                if (score2 > 80) score2 = 80;
+
+                studentAttempts.push(score2);
+
+                displayResultsView();
+            }
+        }
+
+        function displayResultsView() {
+            // تحديث عرض سجل المحاولات
             const attemptsList = document.getElementById("attempts-history-list");
             attemptsList.innerHTML = "";
             studentAttempts.forEach((score, index) => {
                 const p = document.createElement("div");
                 p.className = "flex justify-between items-center bg-slate-900/50 px-3 py-2 rounded-lg border border-slate-700/50 text-xs";
-                p.innerHTML = `<span class="text-slate-300">المحاولة ${index + 1}:</span> <span class="text-cyan-400 font-bold">${score} / 80</span>`;
+                p.innerHTML = `<span class="text-slate-300">النتيجة ${index === 0 ? 'الأولى' : 'الثانية'}:</span> <span class="text-cyan-400 font-bold">${score} / 80</span>`;
                 attemptsList.appendChild(p);
             });
 
-            const mistakesContainer = document.getElementById("mistakes-container");
-            const mistakesList = document.getElementById("mistakes-list");
-            mistakesList.innerHTML = "";
+            // تجهيز الأزرار المناسبة في نافذة النتيجة
+            const actionsContainer = document.getElementById("result-actions");
+            actionsContainer.innerHTML = "";
 
-            if (mistakes.length > 0) {
-                mistakesContainer.classList.remove("hidden");
-                mistakes.forEach((m, idx) => {
-                    const item = document.createElement("div");
-                    item.className = "bg-slate-800/90 border border-amber-500/30 p-4 rounded-xl space-y-2 text-xs sm:text-sm";
-                    item.innerHTML = `
-                        <p class="font-bold text-white"><span class="text-amber-400">خطأ ${idx + 1} (${m.goal}):</span> ${m.question}</p>
-                        <p class="text-emerald-400"><strong class="text-slate-300">الإجابة الصحيحة:</strong> ${m.correctText}</p>
-                        <p class="text-slate-300 bg-slate-900/60 p-2.5 rounded-lg border border-slate-700/60"><strong class="text-cyan-400">التوضيح العلمي:</strong> ${m.rationale}</p>
+            if (currentMode === "first_attempt") {
+                if (incorrectQuestionIds.length > 0) {
+                    // يوجد أخطاء -> إظهار زر جولة تصحيح الأخطاء فقط وزر الخروج
+                    actionsContainer.innerHTML = `
+                        <button onclick="startCorrectionRound()" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
+                            📝 جولة إعادة تصحيح الأخطاء فقط (${incorrectQuestionIds.length} أسئلة)
+                        </button>
+                        <button onclick="exitExam()" class="px-6 py-3 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
+                            ❌ الخروج
+                        </button>
                     `;
-                    mistakesList.appendChild(item);
-                });
+                } else {
+                    // العلامة كاملة 80/80 من المرة الأولى
+                    actionsContainer.innerHTML = `
+                        <button onclick="restartExam()" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
+                            🔄 إعادة الاختبار بالكامل
+                        </button>
+                        <button onclick="exitExam()" class="px-6 py-3 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
+                            ❌ الخروج
+                        </button>
+                    `;
+                }
             } else {
-                mistakesContainer.classList.add("hidden");
+                // انتهت جولة التصحيح
+                actionsContainer.innerHTML = `
+                    <button onclick="restartExam()" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
+                        🔄 إعادة الاختبار بالكامل
+                    </button>
+                    <button onclick="exitExam()" class="px-6 py-3 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
+                        ❌ الخروج
+                    </button>
+                `;
             }
 
             document.getElementById("quiz-view").classList.add("hidden");
@@ -716,11 +733,17 @@
             });
         }
 
-        function restartExam() {
+        function startCorrectionRound() {
+            currentMode = "correction_round";
+            document.getElementById("quiz-title-tag").innerText = `جولة تصحيح الأخطاء فقط (${incorrectQuestionIds.length} أسئلة)`;
+
+            // فلترة الأسئلة الأصلية لتتضمن فقط التي وقعت فيها الطالبة بالخطأ
+            activeQuestions = originalQuestionsData.filter(q => incorrectQuestionIds.includes(q.id));
             shuffleArray(activeQuestions);
             activeQuestions.forEach(q => {
                 shuffleArray(q.options);
             });
+
             renderFormQuestions();
 
             document.getElementById("result-view").classList.add("hidden");
@@ -729,6 +752,21 @@
                 top: 0,
                 behavior: 'smooth'
             });
+        }
+
+        function restartExam() {
+            document.getElementById("student-name").value = "";
+            document.getElementById("result-view").classList.add("hidden");
+            document.getElementById("welcome-view").classList.remove("hidden");
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function exitExam() {
+            alert("تم إنهاء الجلسة والخروج بنجاح. شكراً لك!");
+            window.location.reload();
         }
     </script>
 </body>
