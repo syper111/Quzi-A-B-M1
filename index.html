@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>امتحان النمذجة للهدفين أ و ب - مع جولة تصحيح الأخطاء</title>
+    <title>امتحان النمذجة للهدفين أ و ب - مع احتفالية العلامة الكاملة</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة الجسيمات التفاعلية للبهجة والاحتفال (Canvas Confetti) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         body {
@@ -39,10 +41,12 @@
         @keyframes pulse-glow {
             0%,
             100% {
-                box-shadow: 0 0 15px rgba(52, 211, 153, 0.4);
+                box-shadow: 0 0 25px rgba(52, 211, 153, 0.6);
+                transform: scale(1);
             }
             50% {
-                box-shadow: 0 0 30px rgba(52, 211, 153, 0.8);
+                box-shadow: 0 0 45px rgba(52, 211, 153, 0.9);
+                transform: scale(1.02);
             }
         }
         
@@ -116,12 +120,12 @@
 
             <!-- Result View -->
             <div id="result-view" class="hidden p-6 sm:p-8 text-center space-y-6">
-                <div class="inline-block p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 mb-2 celebrate-glow">
+                <div id="result-icon-container" class="inline-block p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 mb-2 celebrate-glow">
                     <svg class="w-12 h-12 mx-auto animate-bounce-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
                     </svg>
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">🎉 نتيجة الاختبار 🎉</h3>
+                <h3 id="result-heading" class="text-2xl sm:text-3xl font-extrabold text-white">🎉 نتيجة الاختبار 🎉</h3>
 
                 <div class="bg-slate-800/60 border border-slate-700/60 p-6 rounded-2xl max-w-sm mx-auto space-y-4 shadow-xl">
                     <p class="text-sm text-slate-300">اسم الطالبة: <span id="res-student-name" class="font-bold text-cyan-400"></span></p>
@@ -132,9 +136,7 @@
                 </div>
 
                 <!-- Action Buttons Container -->
-                <div id="result-actions" class="flex flex-wrap justify-center gap-3 pt-4 border-t border-slate-800">
-                    <!-- Dynamic Buttons will be injected here (Correction round button if attempt 1, or Restart/Exit if attempt 2) -->
-                </div>
+                <div id="result-actions" class="flex flex-wrap justify-center gap-3 pt-4 border-t border-slate-800"></div>
             </div>
 
         </div>
@@ -500,8 +502,8 @@
         let activeQuestions = [];
         let studentName = "";
         let studentAttempts = [];
-        let incorrectQuestionIds = []; // لحفظ معرفات الأسئلة الخاطئة في المحاولة الأولى
-        let currentMode = "first_attempt"; // "first_attempt" أو "correction_round"
+        let incorrectQuestionIds = [];
+        let currentMode = "first_attempt";
 
         function shuffleArray(array) {
             let currentIndex = array.length,
@@ -528,7 +530,6 @@
 
             document.getElementById("quiz-title-tag").innerText = "امتحان النمذجة (المحاولة الأولى - 20 سؤالاً)";
 
-            // تجهيز الأسئلة كاملة مع خلطها وخلط الخيارات
             activeQuestions = JSON.parse(JSON.stringify(originalQuestionsData));
             shuffleArray(activeQuestions);
             activeQuestions.forEach(q => {
@@ -618,7 +619,6 @@
             }
 
             if (currentMode === "first_attempt") {
-                // تقييم المحاولة الأولى
                 let correctCount = 0;
                 incorrectQuestionIds = [];
 
@@ -645,7 +645,6 @@
                 displayResultsView();
 
             } else if (currentMode === "correction_round") {
-                // تقييم جولة تصحيح الأخطاء فقط
                 let correctInCorrection = 0;
 
                 activeQuestions.forEach((q, i) => {
@@ -663,8 +662,6 @@
                     }
                 });
 
-                // المحاولة الثانية تحسب بتعديل الأخطاء التي تم تصحيحها
-                // الدرجة الأولى + (عدد الأسئلة الصحيحة في التصحيح * 4) بحيث لا تتجاوز 80
                 const previousScore = studentAttempts[0];
                 const addedScore = correctInCorrection * 4;
                 let score2 = previousScore + addedScore;
@@ -676,8 +673,48 @@
             }
         }
 
+        // دالة إطلاق مؤثرات الفرح والبهجة والألعاب النارية للعلامة الكاملة
+        function triggerFullMarkCelebration() {
+            // إطلاق انفجارات متسلسلة من قصاصات الورق الملونة (Confetti)
+            var duration = 3.5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = {
+                startVelocity: 30,
+                spread: 360,
+                ticks: 60,
+                zIndex: 99999
+            };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+                var particleCount = 50 * (timeLeft / duration);
+
+                // إطلاق من جهتين مختلفتين
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: {
+                        x: randomInRange(0.1, 0.3),
+                        y: Math.random() - 0.2
+                    }
+                }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: {
+                        x: randomInRange(0.7, 0.9),
+                        y: Math.random() - 0.2
+                    }
+                }));
+            }, 250);
+        }
+
         function displayResultsView() {
-            // تحديث عرض سجل المحاولات
             const attemptsList = document.getElementById("attempts-history-list");
             attemptsList.innerHTML = "";
             studentAttempts.forEach((score, index) => {
@@ -687,13 +724,27 @@
                 attemptsList.appendChild(p);
             });
 
-            // تجهيز الأزرار المناسبة في نافذة النتيجة
+            // التحقق مما إذا كانت الطالبة قد حصلت على العلامة الكاملة (80/80)
+            const latestScore = studentAttempts[studentAttempts.length - 1];
+            const resultHeading = document.getElementById("result-heading");
+            const iconContainer = document.getElementById("result-icon-container");
+
+            if (latestScore === 80) {
+                resultHeading.innerHTML = "🌟 ممتاز جداً! علامة كاملة مبهرة 🌟<br><span class='text-amber-400 text-lg'>مبروك للطالبة المتألقة! 🏆</span>";
+                iconContainer.className = "inline-block p-5 bg-amber-500/20 border-2 border-amber-400 rounded-full text-amber-300 mb-2 celebrate-glow";
+
+                // تشغيل مؤثرات الفرح فوراً
+                triggerFullMarkCelebration();
+            } else {
+                resultHeading.innerHTML = "🎉 نتيجة الاختبار 🎉";
+                iconContainer.className = "inline-block p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 mb-2 celebrate-glow";
+            }
+
             const actionsContainer = document.getElementById("result-actions");
             actionsContainer.innerHTML = "";
 
             if (currentMode === "first_attempt") {
                 if (incorrectQuestionIds.length > 0) {
-                    // يوجد أخطاء -> إظهار زر جولة تصحيح الأخطاء فقط وزر الخروج
                     actionsContainer.innerHTML = `
                         <button onclick="startCorrectionRound()" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
                             📝 جولة إعادة تصحيح الأخطاء فقط (${incorrectQuestionIds.length} أسئلة)
@@ -703,7 +754,6 @@
                         </button>
                     `;
                 } else {
-                    // العلامة كاملة 80/80 من المرة الأولى
                     actionsContainer.innerHTML = `
                         <button onclick="restartExam()" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
                             🔄 إعادة الاختبار بالكامل
@@ -714,7 +764,6 @@
                     `;
                 }
             } else {
-                // انتهت جولة التصحيح
                 actionsContainer.innerHTML = `
                     <button onclick="restartExam()" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-lg transform active:scale-95">
                         🔄 إعادة الاختبار بالكامل
@@ -737,7 +786,6 @@
             currentMode = "correction_round";
             document.getElementById("quiz-title-tag").innerText = `جولة تصحيح الأخطاء فقط (${incorrectQuestionIds.length} أسئلة)`;
 
-            // فلترة الأسئلة الأصلية لتتضمن فقط التي وقعت فيها الطالبة بالخطأ
             activeQuestions = originalQuestionsData.filter(q => incorrectQuestionIds.includes(q.id));
             shuffleArray(activeQuestions);
             activeQuestions.forEach(q => {
