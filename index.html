@@ -67,18 +67,7 @@
 
 <body class="flex flex-col min-h-screen">
 
-    <!-- Header Section -->
-    <header class="glass-panel border-b border-slate-800/80 py-4 px-4 sm:px-8 sticky top-0 z-30 shadow-lg">
-        <div class="max-w-4xl mx-auto flex flex-col items-center justify-center text-center gap-1.5">
-            <h1 class="text-base sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">امتحان النمذجة للهدفين أ و ب</h1>
-            <p class="text-xs text-slate-300 font-semibold">تكنولوجيا المعلومات المستوى الثاني | الصف العاشر</p>
-            <div id="header-badge" class="hidden text-xs bg-cyan-500/10 text-cyan-400 px-3 py-1 rounded-full border border-cyan-500/20 font-bold mt-1">
-                جاري اختبار الطالبة...
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Container -->
+    <!-- Main Container (Not Fixed Header) -->
     <main class="flex-grow flex items-center justify-center p-3 sm:p-6 my-auto">
         <div class="w-full max-w-3xl glass-panel rounded-3xl overflow-hidden transition-all duration-300">
 
@@ -118,6 +107,14 @@
 
             <!-- Quiz Form View -->
             <div id="quiz-view" class="hidden p-4 sm:p-8 space-y-6">
+                <!-- Integrated Header Info Inside Card -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-2 shadow-inner">
+                    <h1 class="text-sm sm:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">تكنولوجيا المعلومات المستوى الثاني | الصف العاشر</h1>
+                    <div id="header-badge" class="text-xs bg-cyan-500/10 text-cyan-400 px-4 py-1.5 rounded-full border border-cyan-500/20 font-bold">
+                        الطالبة: ابراهيم
+                    </div>
+                </div>
+
                 <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 pb-4 gap-2">
                     <div class="flex flex-col">
                         <span id="quiz-title-tag" class="text-xs font-bold text-cyan-300 bg-cyan-500/10 px-4 py-1.5 rounded-full border border-cyan-500/20 inline-block">امتحان النمذجة للهدفين أ و ب (المحاولة الأولى)</span>
@@ -537,7 +534,6 @@
 
             document.getElementById("quiz-title-tag").innerText = "امتحان النمذجة للهدفين أ و ب (المحاولة الأولى - 20 سؤالاً)";
             document.getElementById("header-badge").innerText = `الطالبة: ${studentName}`;
-            document.getElementById("header-badge").classList.remove("hidden");
 
             activeQuestions = JSON.parse(JSON.stringify(originalQuestionsData));
             shuffleArray(activeQuestions);
@@ -732,47 +728,34 @@
             const iconContainer = document.getElementById("result-icon-container");
 
             if (latestScore === 80) {
-                resultHeading.innerHTML = "🌟 ممتاز جداً! علامة كاملة مبهرة 🌟<br><span class='text-amber-400 text-sm sm:text-base mt-1 block font-semibold'>مبروك للطالبة المتألقة! 🏆</span>";
-                iconContainer.className = "inline-block p-5 bg-amber-500/20 border-2 border-amber-400 rounded-full text-amber-300 mb-2 celebrate-glow";
+                resultHeading.innerHTML = "🌟 ممتاز جداً! علامة كاملة مبهرة 🌟<br><span class='text-amber-400 text-xs font-semibold'>أداء رائع يعكس فهمك العميق للنمذجة وجداول البيانات</span>";
+                iconContainer.className = "inline-block p-5 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-400 mb-2 celebrate-glow";
                 triggerFullMarkCelebration();
             } else {
-                resultHeading.innerHTML = "🎉 نتيجة الاختبار 🎉";
-                iconContainer.className = "inline-block p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 mb-2 celebrate-glow";
+                resultHeading.innerHTML = "🎯 انتهى الاختبار 🎯<br><span class='text-cyan-400 text-xs font-semibold'>يمكنك مراجعة الأخطاء والمحاولة مرة أخرى لتحسين النتيجة</span>";
+                iconContainer.className = "inline-block p-5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 mb-2";
             }
 
-            const actionsContainer = document.getElementById("result-actions");
-            actionsContainer.innerHTML = "";
+            const actionsDiv = document.getElementById("result-actions");
+            actionsDiv.innerHTML = "";
 
-            if (currentMode === "first_attempt") {
-                if (incorrectQuestionIds.length > 0) {
-                    actionsContainer.innerHTML = `
-                        <button onclick="startCorrectionRound()" class="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 text-xs sm:text-sm font-black rounded-2xl transition-all shadow-lg transform active:scale-95">
-                            📝 جولة إعادة تصحيح الأخطاء فقط (${incorrectQuestionIds.length} أسئلة)
-                        </button>
-                        <button onclick="exitExam()" class="px-6 py-3.5 bg-slate-800 hover:bg-rose-950/50 text-rose-400 border border-rose-500/30 text-xs sm:text-sm font-bold rounded-2xl transition-all transform active:scale-95">
-                            ❌ خروج
-                        </button>
-                    `;
-                } else {
-                    actionsContainer.innerHTML = `
-                        <button onclick="restartExam()" class="px-6 py-3.5 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 text-xs sm:text-sm font-black rounded-2xl transition-all shadow-lg transform active:scale-95">
-                            🔄 إعادة الاختبار بالكامل
-                        </button>
-                        <button onclick="exitExam()" class="px-6 py-3.5 bg-slate-800 hover:bg-rose-950/50 text-rose-400 border border-rose-500/30 text-xs sm:text-sm font-bold rounded-2xl transition-all transform active:scale-95">
-                            ❌ خروج
-                        </button>
-                    `;
-                }
-            } else {
-                actionsContainer.innerHTML = `
-                    <button onclick="restartExam()" class="px-6 py-3.5 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 text-xs sm:text-sm font-black rounded-2xl transition-all shadow-lg transform active:scale-95">
-                        🔄 إعادة الاختبار بالكامل
-                    </button>
-                    <button onclick="exitExam()" class="px-6 py-3.5 bg-slate-800 hover:bg-rose-950/50 text-rose-400 border border-rose-500/30 text-xs sm:text-sm font-bold rounded-2xl transition-all transform active:scale-95">
-                        ❌ خروج
-                    </button>
-                `;
+            if (currentMode === "first_attempt" && incorrectQuestionIds.length > 0) {
+                const retryBtn = document.createElement("button");
+                retryBtn.className = "px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-amber-500/20";
+                retryBtn.innerHTML = `تصحيح الأخطاء (${incorrectQuestionIds.length} أسئلة خاطئة) 🔄`;
+                retryBtn.onclick = startCorrectionRound;
+                actionsDiv.appendChild(retryBtn);
             }
+
+            const restartBtn = document.createElement("button");
+            restartBtn.className = "px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs sm:text-sm transition-all border border-slate-700";
+            restartBtn.innerHTML = "إعادة الاختبار من جديد 🏠";
+            restartBtn.onclick = () => {
+                document.getElementById("result-view").classList.add("hidden");
+                document.getElementById("welcome-view").classList.remove("hidden");
+                document.getElementById("student-name").value = "";
+            };
+            actionsDiv.appendChild(restartBtn);
 
             document.getElementById("quiz-view").classList.add("hidden");
             document.getElementById("result-view").classList.remove("hidden");
@@ -784,14 +767,13 @@
 
         function startCorrectionRound() {
             currentMode = "correction_round";
-            document.getElementById("quiz-title-tag").innerText = `جولة تصحيح الأخطاء فقط (${incorrectQuestionIds.length} أسئلة)`;
-
             activeQuestions = originalQuestionsData.filter(q => incorrectQuestionIds.includes(q.id));
             shuffleArray(activeQuestions);
             activeQuestions.forEach(q => {
                 shuffleArray(q.options);
             });
 
+            document.getElementById("quiz-title-tag").innerText = `محاولة تصحيح الأخطاء (${activeQuestions.length} أسئلة)`;
             renderFormQuestions();
 
             document.getElementById("result-view").classList.add("hidden");
@@ -800,22 +782,6 @@
                 top: 0,
                 behavior: 'smooth'
             });
-        }
-
-        function restartExam() {
-            document.getElementById("student-name").value = "";
-            document.getElementById("header-badge").classList.add("hidden");
-            document.getElementById("result-view").classList.add("hidden");
-            document.getElementById("welcome-view").classList.remove("hidden");
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
-        function exitExam() {
-            alert("تم إنهاء الجلسة والخروج بنجاح. شكراً لك!");
-            window.location.reload();
         }
     </script>
 </body>
