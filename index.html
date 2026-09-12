@@ -67,27 +67,27 @@
 
 <body class="flex flex-col min-h-screen m-0 p-0 w-full overflow-x-hidden">
 
-    <!-- Custom Alert Tab / Modal -->
-    <div id="custom-alert-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md hidden p-4">
-        <div class="glass-panel border border-rose-500/30 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-5 shadow-2xl animate-float">
-            <div class="w-14 h-14 bg-rose-500/10 border border-rose-500/30 rounded-2xl flex items-center justify-center mx-auto text-rose-400">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Anti-Cheat Warning Modal -->
+    <div id="cheat-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel border-rose-500/50 bg-slate-900/95 max-w-md w-full p-6 sm:p-8 rounded-3xl text-center space-y-5 shadow-2xl shadow-rose-500/20">
+            <div class="inline-block p-4 bg-rose-500/20 border border-rose-500/30 rounded-full text-rose-400 animate-bounce">
+                <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                 </svg>
             </div>
             <div class="space-y-2">
-                <h3 id="custom-alert-title" class="text-lg sm:text-xl font-black text-white">تنبيه أمني</h3>
-                <p id="custom-alert-message" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+                <h3 class="text-xl sm:text-2xl font-black text-rose-400">⚠️ تم ضبط محاولة غش!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">تم رصد مغادرتك لصفحة الامتحان أو تبديل التبويب. وفقاً لتعليمات الأمان، تم احتساب النتيجة <span class="text-rose-400 font-bold">صفر (0)</span> للمحاولة واعتبار الاختبار منتهياً.</p>
             </div>
-            <button onclick="closeCustomAlert()" class="w-full py-3.5 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white font-black rounded-xl text-xs sm:text-sm shadow-lg shadow-rose-500/25 transition-all">
-                فهمت، متابعة
+            <button onclick="handleCheatZeroScore()" class="w-full py-3.5 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white font-black rounded-2xl text-sm transition-all shadow-lg shadow-rose-500/30">
+                حسناً
             </button>
         </div>
     </div>
 
-    <!-- Main Full-Width Container -->
-    <main class="flex-grow flex items-center justify-center w-full p-2 sm:p-4 my-auto">
-        <div class="w-full max-w-4xl glass-panel rounded-none sm:rounded-3xl overflow-hidden transition-all duration-300 min-h-screen sm:min-h-0 flex flex-col justify-center">
+    <!-- Main Full-Screen Container -->
+    <main class="flex-grow flex items-center justify-center w-full p-2 sm:p-4 md:p-6 my-auto">
+        <div class="w-full max-w-4xl glass-panel rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-300">
 
             <!-- Welcome View -->
             <div id="welcome-view" class="p-6 sm:p-10 text-center space-y-6">
@@ -99,7 +99,7 @@
 
                 <div class="space-y-2">
                     <h2 class="text-2xl sm:text-4xl font-black tracking-tight text-white">امتحان النمذجة للهدفين أ و ب</h2>
-                    <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">اختبار شامل لتقييم مدى فهمك لمهارات نمذجة البيانات، الجداول الإلكترونية، لوحة المعلومات.</p>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">اختبار شامل لقياس مهارات النمذجة وجداول البيانات.</p>
                 </div>
 
                 <!-- Prepared & Supervised Info -->
@@ -109,9 +109,14 @@
                     <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-400"></span> بإشراف المعلمة: <span class="font-bold text-cyan-300">نسرين قنديل</span></div>
                 </div>
 
-                <!-- Anti-Cheat Notice Box -->
-                <div class="bg-rose-500/10 border border-rose-500/30 px-4 py-3 rounded-2xl max-w-md mx-auto text-xs text-rose-300 font-semibold text-center leading-relaxed">
-                    ⚠️ تنبيه هام: نظام منع الغش مفعل. مغادرة التبويب ستُعتبر محاولة غش، وسيتم رصدها وتصفير النتيجة فوراً.
+                <!-- Anti-Cheat Notice Box Moved Directly Under Prep Info -->
+                <div class="bg-rose-500/10 border border-rose-500/30 rounded-2xl p-4 max-w-lg mx-auto text-rose-300 text-xs sm:text-sm flex items-start gap-3 text-right shadow-inner">
+                    <svg class="w-5 h-5 shrink-0 mt-0.5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <div>
+                        <span class="font-bold block text-rose-400 mb-0.5">تنبيه هام جداً بشأن الغش:</span> يحرص النظام على نزاهة الاختبار؛ لذا فإن أي محاولة لمغادرة صفحة الامتحان أو فتح تبويب أو تطبيق آخر ستؤدي فوراً إلى <span class="font-bold underline">احتساب النتيجة (صفر)</span>                        وإلغاء المحاولة!
+                    </div>
                 </div>
 
                 <div class="max-w-sm mx-auto space-y-2 text-right pt-2">
@@ -140,14 +145,10 @@
 
                 <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 pb-4 gap-2">
                     <div class="flex flex-col">
-                        <span id="quiz-title-tag" class="text-xs font-bold text-cyan-300 bg-cyan-500/10 px-4 py-1.5 rounded-full border border-cyan-500/20 inline-block">امتحان النمذجة للهدفين أ و ب</span>
-                        <span class="text-xs text-slate-400 mt-1.5 px-1">عدد الأسئلة: <span class="text-white font-bold">20 سؤالاً</span> | العلامة الكلية: <span class="text-white font-bold">80 علامة</span> (4 علامات لكل سؤال)</span>
+                        <span id="quiz-title-tag" class="text-xs font-bold text-cyan-300 bg-cyan-500/10 px-4 py-1.5 rounded-full border border-cyan-500/20 inline-block">امتحان النمذجة للهدفين أ و ب (المحاولة الأولى)</span>
+                        <span class="text-xs text-slate-400 mt-1.5 px-1">عدد الأسئلة: <span class="text-white font-bold" id="questions-count-label">20 سؤالاً</span> | العلامة الكلية: <span class="text-white font-bold" id="total-score-label">80 علامة</span></span>
                     </div>
-                </div>
-
-                <!-- Mandatory Note -->
-                <div class="bg-amber-500/10 border border-amber-500/30 px-4 py-3 rounded-xl text-xs text-amber-300 font-semibold text-center leading-relaxed">
-                    ملاحظة هامة: يجب الإجابة على جميع الأسئلة الظاهرة أدناه لتتمكن من تسليم الاختبار وعرض النتيجة بنجاح.
+                    <span class="text-xs text-rose-400 bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20 font-bold flex items-center gap-1 shrink-0">⚠️ يرجى الإجابة على كافة الأسئلة</span>
                 </div>
 
                 <div id="questions-form-container" class="space-y-6"></div>
@@ -171,8 +172,8 @@
                 <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl max-w-sm mx-auto space-y-4 shadow-xl">
                     <p class="text-xs sm:text-sm text-slate-300">اسم الطالبة: <span id="res-student-name" class="font-bold text-cyan-400"></span></p>
                     <div class="border-t border-slate-800 pt-3 space-y-2">
-                        <p class="text-xs text-slate-400 font-semibold mb-1">النتيجة النهائية:</p>
-                        <div id="final-score-display" class="text-lg font-black text-cyan-400"></div>
+                        <p class="text-xs text-slate-400 font-semibold mb-1">سجل المحاولات والنتائج:</p>
+                        <div id="attempts-history-list" class="space-y-1.5 text-xs font-bold text-cyan-400"></div>
                     </div>
                 </div>
 
@@ -361,7 +362,7 @@
         }, {
             id: 11,
             goal: "الهدف (ب)",
-            question: "ما المقصود بـ (لوحة المعلومات) في سياق برامج جداول البيانات والتقارير؟",
+            question: "ما هو المقصود بلوحة البيانات (Dashboard) في سياق برامج جداول البيانات والتقارير الإدارية؟",
             options: [{
                 text: "واجهة مرئية تجمع وتعرض أهم مؤشرات الأداء والبيانات الرئيسية في مكان واحد لتسهيل المتابعة",
                 isCorrect: true
@@ -378,7 +379,7 @@
         }, {
             id: 12,
             goal: "الهدف (ب)",
-            question: "كيف تساهم لوحة المعلومات في تسهيل عمل الإدارة العليا داخل المؤسسات؟",
+            question: "كيف تساهم لوحات البيانات التفاعلية في تسهيل عمل الإدارة العليا داخل المؤسسات؟",
             options: [{
                 text: "عبر إعطاء نظرة شاملة ولحظية على حالة العمل والمؤشرات الحيوية دون الحاجة لتفحص الجداول الكبيرة",
                 isCorrect: true
@@ -395,7 +396,7 @@
         }, {
             id: 13,
             goal: "الهدف (ب)",
-            question: "أي من العناصر التالية يُعد أساسياً عند تصميم لوحة معلومات فعالة ومفيدة للمستخدمين؟",
+            question: "أي من العناصر التالية يُعد أساسياً عند تصميم لوحة بيانات (Dashboard) فعالة ومفيدة للمستخدمين؟",
             options: [{
                 text: "التركيز على المؤشرات الحيوية الهامة، ووضوح الرسوم البيانية، وسقوط التفاصيل الزائدة",
                 isCorrect: true
@@ -532,23 +533,49 @@
 
         let activeQuestions = [];
         let studentName = "";
-        let examStarted = false;
-        let alertCallback = null;
+        let studentAttempts = [];
+        let incorrectQuestionsMap = [];
+        let currentMode = "first_attempt";
+        let isExamActive = false;
 
-        function showCustomAlert(message, title = "تنبيه أمني", callback = null) {
-            document.getElementById("custom-alert-title").innerText = title;
-            document.getElementById("custom-alert-message").innerText = message;
-            alertCallback = callback;
-            document.getElementById("custom-alert-modal").classList.remove("hidden");
+        // Anti-Cheat: Detect Tab Switching or Minimized Window
+        document.addEventListener("visibilitychange", function() {
+            if (isExamActive && document.hidden) {
+                document.getElementById("cheat-modal").classList.remove("hidden");
+            }
+        });
+
+        function handleCheatZeroScore() {
+            document.getElementById("cheat-modal").classList.add("hidden");
+            isExamActive = false;
+
+            studentAttempts = [0];
+            currentMode = "first_attempt";
+            incorrectQuestionsMap = [];
+
+            document.getElementById("res-student-name").innerText = studentName || "طالبة";
+
+            document.getElementById("result-icon-container").className = "inline-block p-5 bg-rose-500/10 border border-rose-500/20 rounded-full text-rose-400 mb-2";
+            document.getElementById("result-heading").innerText = "⚠️ تم إنهاء الاختبار (وانتيجة صفر بسبب الغش)";
+
+            displayResultsViewContent();
+
+            document.getElementById("quiz-view").classList.add("hidden");
+            document.getElementById("welcome-view").classList.add("hidden");
+            document.getElementById("result-view").classList.remove("hidden");
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
-        function closeCustomAlert() {
-            document.getElementById("custom-alert-modal").classList.add("hidden");
-            if (alertCallback) {
-                let cb = alertCallback;
-                alertCallback = null;
-                cb();
-            }
+        function resetExamAfterCheat() {
+            document.getElementById("cheat-modal").classList.add("hidden");
+            isExamActive = false;
+            document.getElementById("quiz-view").classList.add("hidden");
+            document.getElementById("result-view").classList.add("hidden");
+            document.getElementById("welcome-view").classList.remove("hidden");
+            document.getElementById("student-name").value = "";
         }
 
         function shuffleArray(array) {
@@ -565,14 +592,19 @@
         function startExam() {
             const nameInput = document.getElementById("student-name").value.trim();
             if (!nameInput) {
-                showCustomAlert("الرجاء إدخال اسم الطالبة قبل بدء الامتحان.", "تنبيه");
+                alert("الرجاء إدخال اسم الطالبة قبل بدء الامتحان.");
                 return;
             }
             studentName = nameInput;
-            examStarted = true;
             document.getElementById("res-student-name").innerText = studentName;
+            studentAttempts = [];
+            incorrectQuestionsMap = [];
+            currentMode = "first_attempt";
+            isExamActive = true;
 
-            document.getElementById("quiz-title-tag").innerText = "امتحان النمذجة للهدفين أ و ب";
+            document.getElementById("quiz-title-tag").innerText = "امتحان النمذجة للهدفين أ و ب (المحاولة الأولى)";
+            document.getElementById("questions-count-label").innerText = `${originalQuestionsData.length} سؤالاً`;
+            document.getElementById("total-score-label").innerText = `${originalQuestionsData.length * 4} علامة`;
             document.getElementById("header-badge").innerText = `الطالبة: ${studentName}`;
 
             activeQuestions = JSON.parse(JSON.stringify(originalQuestionsData));
@@ -588,27 +620,6 @@
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
-            });
-        }
-
-        // Anti-Cheat Event Listeners (Hidden tab detection)
-        document.addEventListener("visibilitychange", () => {
-            if (examStarted && document.hidden) {
-                handleCheatAttempt();
-            }
-        });
-
-        window.addEventListener("blur", () => {
-            if (examStarted) {
-                handleCheatAttempt();
-            }
-        });
-
-        function handleCheatAttempt() {
-            if (!examStarted) return;
-            examStarted = false;
-            showCustomAlert("تم رصد محاولة غش! تم تصفير النتيجة.", "تنبيه أمني خطير", () => {
-                displayResultsView(0, true);
             });
         }
 
@@ -674,7 +685,6 @@
             }
 
             if (hasUnanswered) {
-                showCustomAlert("الرجاء الإجابة على جميع الأسئلة قبل تسليم الاختبار.", "تنبيه");
                 const firstUnansweredCard = document.getElementById(`question-card-${firstUnansweredIndex}`);
                 if (firstUnansweredCard) {
                     firstUnansweredCard.scrollIntoView({
@@ -685,98 +695,134 @@
                 return;
             }
 
-            examStarted = false;
-            let correctCount = 0;
-            activeQuestions.forEach((q, i) => {
-                const radios = document.getElementsByName(`question_${i}`);
-                let selectedOptIdx = null;
-                for (let r of radios) {
-                    if (r.checked) {
-                        selectedOptIdx = parseInt(r.value);
-                        break;
+            isExamActive = false;
+
+            if (currentMode === "first_attempt") {
+                let correctCount = 0;
+                incorrectQuestionsMap = [];
+
+                activeQuestions.forEach((q, i) => {
+                    const radios = document.getElementsByName(`question_${i}`);
+                    let selectedOptIdx = null;
+                    for (let r of radios) {
+                        if (r.checked) {
+                            selectedOptIdx = parseInt(r.value);
+                            break;
+                        }
                     }
-                }
 
-                if (selectedOptIdx !== null && q.options[selectedOptIdx].isCorrect) {
-                    correctCount++;
-                }
-            });
+                    const selectedOptText = selectedOptIdx !== null ? q.options[selectedOptIdx].text : null;
+                    const originalQ = originalQuestionsData.find(item => item.id === q.id);
+                    const correctOptObj = originalQ.options.find(o => o.isCorrect);
 
-            const finalScore = correctCount * 4;
-            displayResultsView(finalScore, false);
+                    if (selectedOptText === correctOptObj.text) {
+                        correctCount++;
+                    } else {
+                        incorrectQuestionsMap.push(JSON.parse(JSON.stringify(originalQ)));
+                    }
+                });
+
+                const score1 = correctCount * 4;
+                studentAttempts.push(score1);
+
+                document.getElementById("result-icon-container").className = "inline-block p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 mb-2 celebrate-glow";
+                document.getElementById("result-heading").innerText = "🎉 نتيجة الاختبار 🎉";
+
+                displayResultsView();
+
+            } else if (currentMode === "correction_round") {
+                let correctInCorrection = 0;
+                let remainingIncorrect = [];
+
+                activeQuestions.forEach((q, i) => {
+                    const radios = document.getElementsByName(`question_${i}`);
+                    let selectedOptIdx = null;
+                    for (let r of radios) {
+                        if (r.checked) {
+                            selectedOptIdx = parseInt(r.value);
+                            break;
+                        }
+                    }
+
+                    const selectedOptText = selectedOptIdx !== null ? q.options[selectedOptIdx].text : null;
+                    const originalQ = originalQuestionsData.find(item => item.id === q.id);
+                    const correctOptObj = originalQ.options.find(o => o.isCorrect);
+
+                    if (selectedOptText === correctOptObj.text) {
+                        correctInCorrection++;
+                    } else {
+                        remainingIncorrect.push(JSON.parse(JSON.stringify(originalQ)));
+                    }
+                });
+
+                incorrectQuestionsMap = remainingIncorrect;
+
+                const baseScore = studentAttempts[0];
+                const finalScore = baseScore + (correctInCorrection * 4);
+                studentAttempts.push(finalScore);
+
+                displayResultsView();
+            }
         }
 
-        function triggerFullMarkCelebration() {
-            var duration = 3.5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = {
-                startVelocity: 30,
-                spread: 360,
-                ticks: 60,
-                zIndex: 99999
-            };
-
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
-
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, {
-                    particleCount,
-                    origin: {
-                        x: randomInRange(0.1, 0.3),
-                        y: Math.random() - 0.2
-                    }
-                }));
-                confetti(Object.assign({}, defaults, {
-                    particleCount,
-                    origin: {
-                        x: randomInRange(0.7, 0.9),
-                        y: Math.random() - 0.2
-                    }
-                }));
-            }, 250);
-        }
-
-        function displayResultsView(score, isCheated) {
-            examStarted = false;
-            document.getElementById("final-score-display").innerText = `${score} / 80`;
-
-            const resultHeading = document.getElementById("result-heading");
-            const iconContainer = document.getElementById("result-icon-container");
-
-            if (isCheated) {
-                resultHeading.innerHTML = "❌ تم رصد محاولة غش وتصفير النتيجة ❌<br><span class='text-rose-400 text-xs font-semibold'>تم اعتبار الخروج من التبويب غشاً ورصد النتيجة (صفر)</span>";
-                iconContainer.className = "inline-block p-5 bg-rose-500/10 border border-rose-500/20 rounded-full text-rose-400 mb-2";
-            } else if (score === 80) {
-                resultHeading.innerHTML = "🌟 ممتاز جداً! علامة كاملة مبهرة 🌟<br><span class='text-amber-400 text-xs font-semibold'>أداء رائع يعكس فهمك العميق للنمذجة وجداول البيانات</span>";
-                iconContainer.className = "inline-block p-5 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-400 mb-2 celebrate-glow";
-                triggerFullMarkCelebration();
-            } else {
-                resultHeading.innerHTML = "🎯 انتهى الاختبار 🎯<br><span class='text-cyan-400 text-xs font-semibold'>شكراً لإتمامك الاختبار</span>";
-                iconContainer.className = "inline-block p-5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 mb-2";
-            }
-
-            const actionsDiv = document.getElementById("result-actions");
-            actionsDiv.innerHTML = "";
-
-            const restartBtn = document.createElement("button");
-            restartBtn.className = "px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-cyan-500/20";
-            restartBtn.innerHTML = "إعادة الاختبار من جديد 🔄";
-            restartBtn.onclick = () => {
-                document.getElementById("result-view").classList.add("hidden");
-                document.getElementById("welcome-view").classList.remove("hidden");
-                document.getElementById("student-name").value = "";
-            };
-            actionsDiv.appendChild(restartBtn);
-
+        function displayResultsView() {
+            displayResultsViewContent();
             document.getElementById("quiz-view").classList.add("hidden");
             document.getElementById("result-view").classList.remove("hidden");
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function displayResultsViewContent() {
+            const historyList = document.getElementById("attempts-history-list");
+            historyList.innerHTML = "";
+
+            studentAttempts.forEach((score, idx) => {
+                const div = document.createElement("div");
+                div.className = "flex justify-between items-center bg-slate-950/40 px-3 py-2 rounded-xl border border-slate-800";
+                let labelName = idx === 0 ? "المحاولة الأساسية" : `جولة التصحيح ${idx}`;
+                div.innerHTML = `<span>${labelName}:</span> <span class="text-white">${score} / ${originalQuestionsData.length * 4}</span>`;
+                historyList.appendChild(div);
+            });
+
+            const actionsContainer = document.getElementById("result-actions");
+            actionsContainer.innerHTML = "";
+
+            if (incorrectQuestionsMap.length > 0 && studentAttempts.length < 3) {
+                const fixButton = document.createElement("button");
+                fixButton.className = "px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black rounded-2xl text-xs sm:text-sm transition-all shadow-lg shadow-amber-500/20";
+                fixButton.innerText = `تصحيح الأخطاء المتبقية (${incorrectQuestionsMap.length} أسئلة) 🛠️`;
+                fixButton.onclick = startCorrectionRound;
+                actionsContainer.appendChild(fixButton);
+            }
+
+            const restartButton = document.createElement("button");
+            restartButton.className = "px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black rounded-2xl text-xs sm:text-sm transition-all shadow-lg shadow-cyan-500/20";
+            restartButton.innerText = "إعادة الامتحان من البداية 🔄";
+            restartButton.onclick = resetExamAfterCheat;
+            actionsContainer.appendChild(restartButton);
+        }
+
+        function startCorrectionRound() {
+            currentMode = "correction_round";
+            isExamActive = true;
+
+            activeQuestions = JSON.parse(JSON.stringify(incorrectQuestionsMap));
+            shuffleArray(activeQuestions);
+            activeQuestions.forEach(q => {
+                shuffleArray(q.options);
+            });
+
+            document.getElementById("quiz-title-tag").innerText = `جولة تصحيح الأخطاء (${activeQuestions.length} أسئلة)`;
+            document.getElementById("questions-count-label").innerText = `${activeQuestions.length} سؤالاً`;
+            document.getElementById("total-score-label").innerText = `${activeQuestions.length * 4} علامات`;
+
+            renderFormQuestions();
+
+            document.getElementById("result-view").classList.add("hidden");
+            document.getElementById("quiz-view").classList.remove("hidden");
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
