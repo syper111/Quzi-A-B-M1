@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             color: #f8fafc;
             min-height: 100vh;
         }
+        
         .glass-panel {
             background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(16px);
@@ -21,29 +23,48 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
+        
         .ltr-text {
             direction: ltr;
             text-align: left;
         }
+        
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
         }
+        
         .animate-float {
             animation: float 3s ease-in-out infinite;
         }
+        
         @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 25px rgba(52, 211, 153, 0.4); transform: scale(1); }
-            50% { box-shadow: 0 0 45px rgba(52, 211, 153, 0.8); transform: scale(1.02); }
+            0%,
+            100% {
+                box-shadow: 0 0 25px rgba(52, 211, 153, 0.4);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 45px rgba(52, 211, 153, 0.8);
+                transform: scale(1.02);
+            }
         }
+        
         .celebrate-glow {
             animation: pulse-glow 2s infinite;
         }
+        
         input[type="radio"] {
             accent-color: #06b6d4;
         }
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen m-0 p-0 w-full overflow-x-hidden">
 
     <!-- Custom Alert Tab / Modal -->
@@ -67,7 +88,7 @@
     <!-- Main Full-Width Container -->
     <main class="flex-grow flex items-center justify-center w-full p-2 sm:p-4 my-auto">
         <div class="w-full max-w-4xl glass-panel rounded-none sm:rounded-3xl overflow-hidden transition-all duration-300 min-h-screen sm:min-h-0 flex flex-col justify-center">
-            
+
             <!-- Welcome View -->
             <div id="welcome-view" class="p-6 sm:p-10 text-center space-y-6">
                 <div class="inline-block p-5 bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-3xl text-cyan-400 mb-2 animate-float shadow-lg shadow-cyan-500/10">
@@ -75,12 +96,12 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2m-6 9l2 2 4-4"></path>
                     </svg>
                 </div>
-                
+
                 <div class="space-y-2">
                     <h2 class="text-2xl sm:text-4xl font-black tracking-tight text-white">امتحان النمذجة للهدفين أ و ب</h2>
                     <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">اختبار شامل لتقييم مدى فهمك لمهارات نمذجة البيانات، الجداول الإلكترونية، لوحة المعلومات.</p>
                 </div>
-                
+
                 <!-- Prepared & Supervised Info -->
                 <div class="inline-flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-slate-300 bg-slate-900/60 px-5 py-3 rounded-2xl border border-slate-700/60 shadow-inner">
                     <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> اعداد المهندس: <span class="font-bold text-white">ابراهيم المدادحة</span></div>
@@ -146,7 +167,7 @@
                     </svg>
                 </div>
                 <h3 id="result-heading" class="text-2xl sm:text-3xl font-black text-white">🎉 نتيجة الاختبار 🎉</h3>
-                
+
                 <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl max-w-sm mx-auto space-y-4 shadow-xl">
                     <p class="text-xs sm:text-sm text-slate-300">اسم الطالبة: <span id="res-student-name" class="font-bold text-cyan-400"></span></p>
                     <div class="border-t border-slate-800 pt-3 space-y-2">
@@ -167,228 +188,347 @@
     </footer>
 
     <script>
-        const originalQuestionsData = [
-            {
-                id: 1,
-                goal: "الهدف (أ)",
-                question: "ما المقصود بعملية نمذجة البيانات (Data Modelling) في نظم معلومات الجداول الإلكترونية؟",
-                options: [
-                    { text: "إنشاء تمثيل هيكلي ومنظم للبيانات والعلاقات بينها لتسهيل التحليل واتخاذ القرار", isCorrect: true },
-                    { text: "مجرد طباعة التقارير الورقية اليومية للموظفين", isCorrect: false },
-                    { text: "حذف كافة قواعد البيانات القديمة من النظام", isCorrect: false },
-                    { text: "شراء أجهزة حاسوب جديدة للشركة", isCorrect: false }
-                ]
-            },
-            {
-                id: 2,
-                goal: "الهدف (أ)",
-                question: "أي مما يلي يُعد المكون الأساسي لبرمجيات جداول البيانات لتخزين البيانات ومعالجتها؟",
-                options: [
-                    { text: "الخلايا (Cells) والصفوف والأعمدة داخل ورقة العمل", isCorrect: true },
-                    { text: "لوحة المفاتيح والماوس فقط", isCorrect: false },
-                    { text: "كابلات الربط الشبكي (UTP)", isCorrect: false },
-                    { text: "خوادم السحابة الحسابية الكبرى", isCorrect: false }
-                ]
-            },
-            {
-                id: 3,
-                goal: "الهدف (أ)",
-                question: "كيف تساهم جداول البيانات في دعم اتخاذ القرار الإداري في المؤسسات؟",
-                options: [
-                    { text: "من خلال إجراء الحسابات المعقدة، تحليل الاتجاهات، ورسم الرسوم البيانية التوضيحية", isCorrect: true },
-                    { text: "عبر إرسال رسائل بريد عشوائية للعملاء", isCorrect: false },
-                    { text: "عن طريق تبريد أجهزة الحواسيب مركزياً", isCorrect: false },
-                    { text: "من خلال طباعة الفواتير يدوياً بالآلة الكاتبة", isCorrect: false }
-                ]
-            },
-            {
-                id: 4,
-                goal: "الهدف (أ)",
-                question: "ما هي الفائدة الرئيسية من استخدام الرسوم البيانية (Charts) في برامج جداول البيانات؟",
-                options: [
-                    { text: "تسهيل البحث عن الاتجاهات والأنماط التاريخية والمالية بوضوح بصري", isCorrect: true },
-                    { text: "زيادة حجم الملفات وصعوبة مشاركتها", isCorrect: false },
-                    { text: "منع تشفير البيانات الحساسة تلقائياً", isCorrect: false },
-                    { text: "توفير طاقة الكهرباء في المكاتب", isCorrect: false }
-                ]
-            },
-            {
-                id: 5,
-                goal: "الهدف (أ)",
-                question: "أي من العوامل الآتية يتم دراستها عادة عند نمذجة بيانات المبيعات في الشركات التجارية؟",
-                options: [
-                    { text: "اتجاهات المبيعات، الأرباح، التكاليف، وهوامش الربح المستقبلية", isCorrect: true },
-                    { text: "نوع لوحة المفاتيح المستخدمة في المكتب", isCorrect: false },
-                    { text: "سرعة مروحة المعالج في حاسوب الموظف", isCorrect: false },
-                    { text: "عدد ساعات غياب موظف الحراسة", isCorrect: false }
-                ]
-            },
-            {
-                id: 6,
-                goal: "الهدف (أ)",
-                question: "ما هو الدور الذي تلعبه البيانات التاريخية داخل نماذج البيانات في المؤسسات؟",
-                options: [
-                    { text: "استخدامها للتنبؤ بالاتجاهات المستقبلية والتخطيط المالي السليم", isCorrect: true },
-                    { text: "إتلافها فوراً لعدم الحاجة إليها", isCorrect: false },
-                    { text: "تخزينها في أوراق مطبوعة فقط", isCorrect: false },
-                    { text: "استخدامها لكتابة رسائل شخصية للموظفين", isCorrect: false }
-                ]
-            },
-            {
-                id: 7,
-                goal: "الهدف (أ)",
-                question: "كيف تؤثر جداول البيانات على كفاءة الموظفين الإداريين في الشركات؟",
-                options: [
-                    { text: "زيادة الإنتاجية عبر أتمتة العمليات الحسابية وتجنب الأخطاء اليدوية", isCorrect: true },
-                    { text: "إبطاء سرعة إنجاز المهام المالية", isCorrect: false },
-                    { text: "إلغاء الحاجة لبرامج معالجة النصوص نهائياً", isCorrect: false },
-                    { text: "تقليل مساحة تخزين الحواسيب", isCorrect: false }
-                ]
-            },
-            {
-                id: 8,
-                goal: "الهدف (أ)",
-                question: "ماذا يقصد بعملية تنظيم وترتيب مدخلات البيانات في جداول الأنشطة التجارية؟",
-                options: [
-                    { text: "ترتيب القيم والأرقام والنصوص في صفوف والأعمدة ليسهل استرجاعها ومعالجتها", isCorrect: true },
-                    { text: "نسخ الملفات عشوائياً على سطح المكتب", isCorrect: false },
-                    { text: "إخفاء الأسعار عن الإدارة العليا", isCorrect: false },
-                    { text: "تحويل جميع البيانات إلى رسوم متحركة", isCorrect: false }
-                ]
-            },
-            {
-                id: 9,
-                goal: "الهدف (أ)",
-                question: "ماذا يقصد بنمذجة \"ماذا لو\" (What-if Modelling) في برامج جداول البيانات؟",
-                options: [
-                    { text: "طريقة تستخدم للتنبؤ بتأثير التغييرات المحتملة في المستقبل مثل خفض الأسعار", isCorrect: true },
-                    { text: "طريقة لإلغاء وتدمير الملفات الضارة في النظام", isCorrect: false },
-                    { text: "تقنية مخصصة لتصميم مواقع الويب التفاعلية", isCorrect: false },
-                    { text: "طريقة لربط أجهزة الراوتر بالإنترنت المنزلي", isCorrect: false }
-                ]
-            },
-            {
-                id: 10,
-                goal: "الهدف (أ)",
-                question: "ما العلاقة بين البيانات المدخلة (Input Data) وصحة مخرجات النمذجة في جداول البيانات؟",
-                options: [
-                    { text: "مدخلات دقيقة وصحيحة تؤدي إلى مخرجات وقرارات موثوقة (مبدأ البيانات الصحيحة تعطي نتائج صحيحة)", isCorrect: true },
-                    { text: "المدخلات السيئة لا تؤثر أبداً على النتائج النهائية للنموذج", isCorrect: false },
-                    { text: "المدخلات المالية مستقلة تماماً عن المخرجات الحسابية", isCorrect: false },
-                    { text: "لا توجد أي علاقة بين نوع المدخلات ودقة المخرجات", isCorrect: false }
-                ]
-            },
-            {
-                id: 11,
-                goal: "الهدف (ب)",
-                question: "ما المقصود بـ (لوحة المعلومات) في سياق برامج جداول البيانات والتقارير؟",
-                options: [
-                    { text: "واجهة مرئية تجمع وتعرض أهم مؤشرات الأداء والبيانات الرئيسية في مكان واحد لتسهيل المتابعة", isCorrect: true },
-                    { text: "مجلد لحفظ صور الخلفيات الخاصة بسطح المكتب", isCorrect: false },
-                    { text: "جهاز هاردوير يستخدم لتوصيل شاشات العرض الكبرى", isCorrect: false },
-                    { text: "قائمة لإعدادات اللغة واللوحة المفاتيح", isCorrect: false }
-                ]
-            },
-            {
-                id: 12,
-                goal: "الهدف (ب)",
-                question: "كيف تساهم لوحة المعلومات في تسهيل عمل الإدارة العليا داخل المؤسسات؟",
-                options: [
-                    { text: "عبر إعطاء نظرة شاملة ولحظية على حالة العمل والمؤشرات الحيوية دون الحاجة لتفحص الجداول الكبيرة", isCorrect: true },
-                    { text: "من خلال طباعة المستندات بشكل يدوي وبطيء", isCorrect: false },
-                    { text: "عبر إخفاء نتائج الأرباح والخسائر عن المديرين", isCorrect: false },
-                    { text: "عن طريق زيادة استهلاك الطاقة الكهربائية للخوادم", isCorrect: false }
-                ]
-            },
-            {
-                id: 13,
-                goal: "الهدف (ب)",
-                question: "أي من العناصر التالية يُعد أساسياً عند تصميم لوحة معلومات فعالة ومفيدة للمستخدمين؟",
-                options: [
-                    { text: "التركيز على المؤشرات الحيوية الهامة، ووضوح الرسوم البيانية، وسقوط التفاصيل الزائدة", isCorrect: true },
-                    { text: "وضع أكبر عدد ممكن من الأرقام المتداخلة دون ترتيب", isCorrect: false },
-                    { text: "استخدام ألوان صاخبة ومعقدة تغطي على البيانات", isCorrect: false },
-                    { text: "الاعتماد على النصوص الطويلة والفقرات الإنشائية فقط", isCorrect: false }
-                ]
-            },
-            {
-                id: 14,
-                goal: "الهدف (ب)",
-                question: "ما هي ميزة استخدام الجداول الإلكترونية مقارنة بدفاتر الأستاذ الورقية التقليدية؟",
-                options: [
-                    { text: "إمكانية تحديث القيم وإعادة حساب النتائج تلقائياً دون إعادة كتابة الجدول", isCorrect: true },
-                    { text: "حاجة تطلب وقتاً أطول في المسح اليدوي", isCorrect: false },
-                    { text: "استحالة تعديل الأرقام بعد إدخالها", isCorrect: false },
-                    { text: "انعدام الحاجة لوجود حواسيب أو برمجيات", isCorrect: false }
-                ]
-            },
-            {
-                id: 15,
-                goal: "الهدف (ب)",
-                question: "لماذا تُعتبر برامج جداول البيانات أداة رئيسية في أقسام الحسابات والمالية؟",
-                options: [
-                    { text: "لقدرتها الفائقة على تتبع المصروفات، إعداد الموازنات، وحساب الأرباح بدقة", isCorrect: true },
-                    { text: "لتصميم شعارات الشركات وتعديل الصور", isCorrect: false },
-                    { text: "لإدارة شبكات الاتصالات السلكية واللاسلكية", isCorrect: false },
-                    { text: "لتشغيل أجهزة الروبوت في خطوط الإنتاج", isCorrect: false }
-                ]
-            },
-            {
-                id: 16,
-                goal: "الهدف (ب)",
-                question: "ما هي الدالة (Function) المستخدمة في برنامج جداول البيانات لإيجاد المجموع الكلي للقيم في النطاق <span class=\"ltr-text inline-block font-mono text-cyan-300 font-bold\">(B2:B10)</span>؟",
-                options: [
-                    { text: '<span class="ltr-text inline-block font-mono">=SUM(B2:B10)</span>', isCorrect: true },
-                    { text: '<span class="ltr-text inline-block font-mono">=AVERAGE(B2:B10)</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=MAX(B2:B10)</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=COUNT(B2:B10)</span>', isCorrect: false }
-                ]
-            },
-            {
-                id: 17,
-                goal: "الهدف (ب)",
-                question: "ما هي الصيغة الصحيحة تماماً لكتابة دالة حساب المتوسط الحسابي (المعدل) للقيم في النطاق <span class=\"ltr-text inline-block font-mono text-cyan-300 font-bold\">(C2:C12)</span>؟",
-                options: [
-                    { text: '<span class="ltr-text inline-block font-mono">=AVERAGE(C2:C12)</span>', isCorrect: true },
-                    { text: '<span class="ltr-text inline-block font-mono">AVERAGE(C2:C12)=</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">SUM(C2:C12)</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=AVG(C2:C12)</span>', isCorrect: false }
-                ]
-            },
-            {
-                id: 18,
-                goal: "الهدف (ب)",
-                question: "أي من الدوال الآتية تستخدم لإيجاد أعلى قيمة رقمية ضمن نطاق محدد من الخلايا في ورقة العمل؟",
-                options: [
-                    { text: '<span class="ltr-text inline-block font-mono">=MAX()</span>', isCorrect: true },
-                    { text: '<span class="ltr-text inline-block font-mono">=MIN()</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=SUM()</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=IF()</span>', isCorrect: false }
-                ]
-            },
-            {
-                id: 19,
-                goal: "الهدف (ب)",
-                question: "ما هي الصيغة الصحيحة لاستخدام الدالة الشرطية (IF) لفحص ما إذا كانت القيمة في الخلية <span class=\"ltr-text inline-block font-mono text-cyan-300 font-bold\">A1</span> أكبر من أو تساوي 50؟",
-                options: [
-                    { text: '<span class="ltr-text inline-block font-mono">=IF(A1>=50, "ناجح", "راسب")</span>', isCorrect: true },
-                    { text: '<span class="ltr-text inline-block font-mono">=IF("ناجح", A1>=50)</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">IF(A1>50)</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=CONDITION(A1>=50)</span>', isCorrect: false }
-                ]
-            },
-            {
-                id: 20,
-                goal: "الهدف (ب)",
-                question: "ما هي الدالة المستخدمة لحساب عدد الخلايا التي تحتوي على قيم رقمية فقط ضمن نطاق معين؟",
-                options: [
-                    { text: '<span class="ltr-text inline-block font-mono">=COUNT()</span>', isCorrect: true },
-                    { text: '<span class="ltr-text inline-block font-mono">=COUNTA()</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=SUM()</span>', isCorrect: false },
-                    { text: '<span class="ltr-text inline-block font-mono">=MAX()</span>', isCorrect: false }
-                ]
-            }
-        ];
+        const originalQuestionsData = [{
+            id: 1,
+            goal: "الهدف (أ)",
+            question: "ما المقصود بعملية نمذجة البيانات (Data Modelling) في نظم معلومات الجداول الإلكترونية؟",
+            options: [{
+                text: "إنشاء تمثيل هيكلي ومنظم للبيانات والعلاقات بينها لتسهيل التحليل واتخاذ القرار",
+                isCorrect: true
+            }, {
+                text: "مجرد طباعة التقارير الورقية اليومية للموظفين",
+                isCorrect: false
+            }, {
+                text: "حذف كافة قواعد البيانات القديمة من النظام",
+                isCorrect: false
+            }, {
+                text: "شراء أجهزة حاسوب جديدة للشركة",
+                isCorrect: false
+            }]
+        }, {
+            id: 2,
+            goal: "الهدف (أ)",
+            question: "أي مما يلي يُعد المكون الأساسي لبرمجيات جداول البيانات لتخزين البيانات ومعالجتها؟",
+            options: [{
+                text: "الخلايا (Cells) والصفوف والأعمدة داخل ورقة العمل",
+                isCorrect: true
+            }, {
+                text: "لوحة المفاتيح والماوس فقط",
+                isCorrect: false
+            }, {
+                text: "كابلات الربط الشبكي (UTP)",
+                isCorrect: false
+            }, {
+                text: "خوادم السحابة الحسابية الكبرى",
+                isCorrect: false
+            }]
+        }, {
+            id: 3,
+            goal: "الهدف (أ)",
+            question: "كيف تساهم جداول البيانات في دعم اتخاذ القرار الإداري في المؤسسات؟",
+            options: [{
+                text: "من خلال إجراء الحسابات المعقدة، تحليل الاتجاهات، ورسم الرسوم البيانية التوضيحية",
+                isCorrect: true
+            }, {
+                text: "عبر إرسال رسائل بريد عشوائية للعملاء",
+                isCorrect: false
+            }, {
+                text: "عن طريق تبريد أجهزة الحواسيب مركزياً",
+                isCorrect: false
+            }, {
+                text: "من خلال طباعة الفواتير يدوياً بالآلة الكاتبة",
+                isCorrect: false
+            }]
+        }, {
+            id: 4,
+            goal: "الهدف (أ)",
+            question: "ما هي الفائدة الرئيسية من استخدام الرسوم البيانية (Charts) في برامج جداول البيانات؟",
+            options: [{
+                text: "تسهيل البحث عن الاتجاهات والأنماط التاريخية والمالية بوضوح بصري",
+                isCorrect: true
+            }, {
+                text: "زيادة حجم الملفات وصعوبة مشاركتها",
+                isCorrect: false
+            }, {
+                text: "منع تشفير البيانات الحساسة تلقائياً",
+                isCorrect: false
+            }, {
+                text: "توفير طاقة الكهرباء في المكاتب",
+                isCorrect: false
+            }]
+        }, {
+            id: 5,
+            goal: "الهدف (أ)",
+            question: "أي من العوامل الآتية يتم دراستها عادة عند نمذجة بيانات المبيعات في الشركات التجارية؟",
+            options: [{
+                text: "اتجاهات المبيعات، الأرباح، التكاليف، وهوامش الربح المستقبلية",
+                isCorrect: true
+            }, {
+                text: "نوع لوحة المفاتيح المستخدمة في المكتب",
+                isCorrect: false
+            }, {
+                text: "سرعة مروحة المعالج في حاسوب الموظف",
+                isCorrect: false
+            }, {
+                text: "عدد ساعات غياب موظف الحراسة",
+                isCorrect: false
+            }]
+        }, {
+            id: 6,
+            goal: "الهدف (أ)",
+            question: "ما هو الدور الذي تلعبه البيانات التاريخية داخل نماذج البيانات في المؤسسات؟",
+            options: [{
+                text: "استخدامها للتنبؤ بالاتجاهات المستقبلية والتخطيط المالي السليم",
+                isCorrect: true
+            }, {
+                text: "إتلافها فوراً لعدم الحاجة إليها",
+                isCorrect: false
+            }, {
+                text: "تخزينها في أوراق مطبوعة فقط",
+                isCorrect: false
+            }, {
+                text: "استخدامها لكتابة رسائل شخصية للموظفين",
+                isCorrect: false
+            }]
+        }, {
+            id: 7,
+            goal: "الهدف (أ)",
+            question: "كيف تؤثر جداول البيانات على كفاءة الموظفين الإداريين في الشركات؟",
+            options: [{
+                text: "زيادة الإنتاجية عبر أتمتة العمليات الحسابية وتجنب الأخطاء اليدوية",
+                isCorrect: true
+            }, {
+                text: "إبطاء سرعة إنجاز المهام المالية",
+                isCorrect: false
+            }, {
+                text: "إلغاء الحاجة لبرامج معالجة النصوص نهائياً",
+                isCorrect: false
+            }, {
+                text: "تقليل مساحة تخزين الحواسيب",
+                isCorrect: false
+            }]
+        }, {
+            id: 8,
+            goal: "الهدف (أ)",
+            question: "ماذا يقصد بعملية تنظيم وترتيب مدخلات البيانات في جداول الأنشطة التجارية؟",
+            options: [{
+                text: "ترتيب القيم والأرقام والنصوص في صفوف والأعمدة ليسهل استرجاعها ومعالجتها",
+                isCorrect: true
+            }, {
+                text: "نسخ الملفات عشوائياً على سطح المكتب",
+                isCorrect: false
+            }, {
+                text: "إخفاء الأسعار عن الإدارة العليا",
+                isCorrect: false
+            }, {
+                text: "تحويل جميع البيانات إلى رسوم متحركة",
+                isCorrect: false
+            }]
+        }, {
+            id: 9,
+            goal: "الهدف (أ)",
+            question: "ماذا يقصد بنمذجة \"ماذا لو\" (What-if Modelling) في برامج جداول البيانات؟",
+            options: [{
+                text: "طريقة تستخدم للتنبؤ بتأثير التغييرات المحتملة في المستقبل مثل خفض الأسعار",
+                isCorrect: true
+            }, {
+                text: "طريقة لإلغاء وتدمير الملفات الضارة في النظام",
+                isCorrect: false
+            }, {
+                text: "تقنية مخصصة لتصميم مواقع الويب التفاعلية",
+                isCorrect: false
+            }, {
+                text: "طريقة لربط أجهزة الراوتر بالإنترنت المنزلي",
+                isCorrect: false
+            }]
+        }, {
+            id: 10,
+            goal: "الهدف (أ)",
+            question: "ما العلاقة بين البيانات المدخلة (Input Data) وصحة مخرجات النمذجة في جداول البيانات؟",
+            options: [{
+                text: "مدخلات دقيقة وصحيحة تؤدي إلى مخرجات وقرارات موثوقة (مبدأ البيانات الصحيحة تعطي نتائج صحيحة)",
+                isCorrect: true
+            }, {
+                text: "المدخلات السيئة لا تؤثر أبداً على النتائج النهائية للنموذج",
+                isCorrect: false
+            }, {
+                text: "المدخلات المالية مستقلة تماماً عن المخرجات الحسابية",
+                isCorrect: false
+            }, {
+                text: "لا توجد أي علاقة بين نوع المدخلات ودقة المخرجات",
+                isCorrect: false
+            }]
+        }, {
+            id: 11,
+            goal: "الهدف (ب)",
+            question: "ما المقصود بـ (لوحة المعلومات) في سياق برامج جداول البيانات والتقارير؟",
+            options: [{
+                text: "واجهة مرئية تجمع وتعرض أهم مؤشرات الأداء والبيانات الرئيسية في مكان واحد لتسهيل المتابعة",
+                isCorrect: true
+            }, {
+                text: "مجلد لحفظ صور الخلفيات الخاصة بسطح المكتب",
+                isCorrect: false
+            }, {
+                text: "جهاز هاردوير يستخدم لتوصيل شاشات العرض الكبرى",
+                isCorrect: false
+            }, {
+                text: "قائمة لإعدادات اللغة واللوحة المفاتيح",
+                isCorrect: false
+            }]
+        }, {
+            id: 12,
+            goal: "الهدف (ب)",
+            question: "كيف تساهم لوحة المعلومات في تسهيل عمل الإدارة العليا داخل المؤسسات؟",
+            options: [{
+                text: "عبر إعطاء نظرة شاملة ولحظية على حالة العمل والمؤشرات الحيوية دون الحاجة لتفحص الجداول الكبيرة",
+                isCorrect: true
+            }, {
+                text: "من خلال طباعة المستندات بشكل يدوي وبطيء",
+                isCorrect: false
+            }, {
+                text: "عبر إخفاء نتائج الأرباح والخسائر عن المديرين",
+                isCorrect: false
+            }, {
+                text: "عن طريق زيادة استهلاك الطاقة الكهربائية للخوادم",
+                isCorrect: false
+            }]
+        }, {
+            id: 13,
+            goal: "الهدف (ب)",
+            question: "أي من العناصر التالية يُعد أساسياً عند تصميم لوحة معلومات فعالة ومفيدة للمستخدمين؟",
+            options: [{
+                text: "التركيز على المؤشرات الحيوية الهامة، ووضوح الرسوم البيانية، وسقوط التفاصيل الزائدة",
+                isCorrect: true
+            }, {
+                text: "وضع أكبر عدد ممكن من الأرقام المتداخلة دون ترتيب",
+                isCorrect: false
+            }, {
+                text: "استخدام ألوان صاخبة ومعقدة تغطي على البيانات",
+                isCorrect: false
+            }, {
+                text: "الاعتماد على النصوص الطويلة والفقرات الإنشائية فقط",
+                isCorrect: false
+            }]
+        }, {
+            id: 14,
+            goal: "الهدف (ب)",
+            question: "ما هي ميزة استخدام الجداول الإلكترونية مقارنة بدفاتر الأستاذ الورقية التقليدية؟",
+            options: [{
+                text: "إمكانية تحديث القيم وإعادة حساب النتائج تلقائياً دون إعادة كتابة الجدول",
+                isCorrect: true
+            }, {
+                text: "حاجة تطلب وقتاً أطول في المسح اليدوي",
+                isCorrect: false
+            }, {
+                text: "استحالة تعديل الأرقام بعد إدخالها",
+                isCorrect: false
+            }, {
+                text: "انعدام الحاجة لوجود حواسيب أو برمجيات",
+                isCorrect: false
+            }]
+        }, {
+            id: 15,
+            goal: "الهدف (ب)",
+            question: "لماذا تُعتبر برامج جداول البيانات أداة رئيسية في أقسام الحسابات والمالية؟",
+            options: [{
+                text: "لقدرتها الفائقة على تتبع المصروفات، إعداد الموازنات، وحساب الأرباح بدقة",
+                isCorrect: true
+            }, {
+                text: "لتصميم شعارات الشركات وتعديل الصور",
+                isCorrect: false
+            }, {
+                text: "لإدارة شبكات الاتصالات السلكية واللاسلكية",
+                isCorrect: false
+            }, {
+                text: "لتشغيل أجهزة الروبوت في خطوط الإنتاج",
+                isCorrect: false
+            }]
+        }, {
+            id: 16,
+            goal: "الهدف (ب)",
+            question: "ما هي الدالة (Function) المستخدمة في برنامج جداول البيانات لإيجاد المجموع الكلي للقيم في النطاق <span class=\"ltr-text inline-block font-mono text-cyan-300 font-bold\">(B2:B10)</span>؟",
+            options: [{
+                text: '<span class="ltr-text inline-block font-mono">=SUM(B2:B10)</span>',
+                isCorrect: true
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=AVERAGE(B2:B10)</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=MAX(B2:B10)</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=COUNT(B2:B10)</span>',
+                isCorrect: false
+            }]
+        }, {
+            id: 17,
+            goal: "الهدف (ب)",
+            question: "ما هي الصيغة الصحيحة تماماً لكتابة دالة حساب المتوسط الحسابي (المعدل) للقيم في النطاق <span class=\"ltr-text inline-block font-mono text-cyan-300 font-bold\">(C2:C12)</span>؟",
+            options: [{
+                text: '<span class="ltr-text inline-block font-mono">=AVERAGE(C2:C12)</span>',
+                isCorrect: true
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">AVERAGE(C2:C12)=</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">SUM(C2:C12)</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=AVG(C2:C12)</span>',
+                isCorrect: false
+            }]
+        }, {
+            id: 18,
+            goal: "الهدف (ب)",
+            question: "أي من الدوال الآتية تستخدم لإيجاد أعلى قيمة رقمية ضمن نطاق محدد من الخلايا في ورقة العمل؟",
+            options: [{
+                text: '<span class="ltr-text inline-block font-mono">=MAX()</span>',
+                isCorrect: true
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=MIN()</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=SUM()</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=IF()</span>',
+                isCorrect: false
+            }]
+        }, {
+            id: 19,
+            goal: "الهدف (ب)",
+            question: "ما هي الصيغة الصحيحة لاستخدام الدالة الشرطية (IF) لفحص ما إذا كانت القيمة في الخلية <span class=\"ltr-text inline-block font-mono text-cyan-300 font-bold\">A1</span> أكبر من أو تساوي 50؟",
+            options: [{
+                text: '<span class="ltr-text inline-block font-mono">=IF(A1>=50, "ناجح", "راسب")</span>',
+                isCorrect: true
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=IF("ناجح", A1>=50)</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">IF(A1>50)</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=CONDITION(A1>=50)</span>',
+                isCorrect: false
+            }]
+        }, {
+            id: 20,
+            goal: "الهدف (ب)",
+            question: "ما هي الدالة المستخدمة لحساب عدد الخلايا التي تحتوي على قيم رقمية فقط ضمن نطاق معين؟",
+            options: [{
+                text: '<span class="ltr-text inline-block font-mono">=COUNT()</span>',
+                isCorrect: true
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=COUNTA()</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=SUM()</span>',
+                isCorrect: false
+            }, {
+                text: '<span class="ltr-text inline-block font-mono">=MAX()</span>',
+                isCorrect: false
+            }]
+        }];
 
         let activeQuestions = [];
         let studentName = "";
@@ -412,7 +552,8 @@
         }
 
         function shuffleArray(array) {
-            let currentIndex = array.length, randomIndex;
+            let currentIndex = array.length,
+                randomIndex;
             while (currentIndex !== 0) {
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex--;
@@ -444,7 +585,10 @@
 
             document.getElementById("welcome-view").classList.add("hidden");
             document.getElementById("quiz-view").classList.remove("hidden");
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
         // Anti-Cheat Event Listeners (Hidden tab detection)
@@ -476,7 +620,7 @@
                 const card = document.createElement("div");
                 card.id = `question-card-${qIndex}`;
                 card.className = "bg-slate-900/50 border border-slate-800/80 rounded-2xl p-4 sm:p-6 space-y-4 shadow-lg transition-all hover:border-slate-700";
-                
+
                 let optionsHtml = "";
                 q.options.forEach((opt, optIndex) => {
                     optionsHtml += `
@@ -533,7 +677,10 @@
                 showCustomAlert("الرجاء الإجابة على جميع الأسئلة قبل تسليم الاختبار.", "تنبيه");
                 const firstUnansweredCard = document.getElementById(`question-card-${firstUnansweredIndex}`);
                 if (firstUnansweredCard) {
-                    firstUnansweredCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstUnansweredCard.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
                 }
                 return;
             }
@@ -562,7 +709,12 @@
         function triggerFullMarkCelebration() {
             var duration = 3.5 * 1000;
             var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 99999 };
+            var defaults = {
+                startVelocity: 30,
+                spread: 360,
+                ticks: 60,
+                zIndex: 99999
+            };
 
             function randomInRange(min, max) {
                 return Math.random() * (max - min) + min;
@@ -574,8 +726,20 @@
                     return clearInterval(interval);
                 }
                 var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: {
+                        x: randomInRange(0.1, 0.3),
+                        y: Math.random() - 0.2
+                    }
+                }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: {
+                        x: randomInRange(0.7, 0.9),
+                        y: Math.random() - 0.2
+                    }
+                }));
             }, 250);
         }
 
@@ -613,8 +777,12 @@
 
             document.getElementById("quiz-view").classList.add("hidden");
             document.getElementById("result-view").classList.remove("hidden");
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
+
 </html>
