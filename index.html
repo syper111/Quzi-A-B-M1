@@ -17,11 +17,11 @@
         }
         
         .glass-panel {
-            background: rgba(30, 41, 59, 0.75);
+            background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
         
         .ltr-text {
@@ -65,11 +65,29 @@
     </style>
 </head>
 
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen m-0 p-0 w-full overflow-x-hidden">
 
-    <!-- Main Container (Not Fixed Header) -->
-    <main class="flex-grow flex items-center justify-center p-3 sm:p-6 my-auto">
-        <div class="w-full max-w-3xl glass-panel rounded-3xl overflow-hidden transition-all duration-300">
+    <!-- Anti-Cheat Warning Modal -->
+    <div id="cheat-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel border-rose-500/50 bg-slate-900/95 max-w-md w-full p-6 sm:p-8 rounded-3xl text-center space-y-5 shadow-2xl shadow-rose-500/20">
+            <div class="inline-block p-4 bg-rose-500/20 border border-rose-500/30 rounded-full text-rose-400 animate-bounce">
+                <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round5" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl sm:text-2xl font-black text-rose-400">⚠️ تحذير: محاولة غش!</h3>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">تم رصد خروجك من صفحة الامتحان أو فتح تبويب/تطبيق آخر. وفقاً لتعليمات الاختبار، تعتبر هذه محاولة غش وسيتم إعادة تشغيل الامتحان من جديد.</p>
+            </div>
+            <button onclick="resetExamAfterCheat()" class="w-full py-3.5 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white font-black rounded-2xl text-sm transition-all shadow-lg shadow-rose-500/30">
+                إعادة المحاولة من البداية 🔄
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Full-Screen Container -->
+    <main class="flex-grow flex items-center justify-center w-full p-2 sm:p-4 md:p-6 my-auto">
+        <div class="w-full max-w-4xl glass-panel rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-300">
 
             <!-- Welcome View -->
             <div id="welcome-view" class="p-6 sm:p-10 text-center space-y-6">
@@ -81,7 +99,7 @@
 
                 <div class="space-y-2">
                     <h2 class="text-2xl sm:text-4xl font-black tracking-tight text-white">امتحان النمذجة للهدفين أ و ب</h2>
-                    <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">اختبار شامل لقياس مهارات النمذجة وجداول البيانات مع نظام المحاولات وتصحيح الأخطاء الذكي.</p>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">اختبار شامل لقياس مهارات النمذجة وجداول البيانات مع نظام الحماية ضد مغادرة التبويب.</p>
                 </div>
 
                 <!-- Prepared & Supervised Info -->
@@ -109,7 +127,7 @@
             <div id="quiz-view" class="hidden p-4 sm:p-8 space-y-6">
                 <!-- Integrated Header Info Inside Card -->
                 <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-2 shadow-inner">
-                    <h1 class="text-sm sm:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">تكنولوجيا المعلومات المستوى الثاني | الصف العاشر</h1>
+                    <h1 class="text-xs sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">تكنولوجيا المعلومات المستوى الثاني | الصف العاشر</h1>
                     <div id="header-badge" class="text-xs bg-cyan-500/10 text-cyan-400 px-4 py-1.5 rounded-full border border-cyan-500/20 font-bold">
                         الطالبة: ابراهيم
                     </div>
@@ -156,7 +174,7 @@
     </main>
 
     <!-- Footer Section -->
-    <footer class="glass-panel border-t border-slate-800/80 py-3 text-center text-xs text-slate-400">
+    <footer class="glass-panel border-t border-slate-800/80 py-3 text-center text-xs text-slate-400 w-full">
         امتحان النمذجة للهدفين أ و ب | اعداد المهندس: ابراهيم المدادحة | بإشراف المعلمة: نسرين قنديل
     </footer>
 
@@ -508,6 +526,23 @@
         let studentAttempts = [];
         let incorrectQuestionIds = [];
         let currentMode = "first_attempt";
+        let isExamActive = false;
+
+        // Anti-Cheat: Detect Tab Switching or Minimized Window
+        document.addEventListener("visibilitychange", function() {
+            if (isExamActive && document.hidden) {
+                document.getElementById("cheat-modal").classList.remove("hidden");
+            }
+        });
+
+        function resetExamAfterCheat() {
+            document.getElementById("cheat-modal").classList.add("hidden");
+            isExamActive = false;
+            document.getElementById("quiz-view").classList.add("hidden");
+            document.getElementById("result-view").classList.add("hidden");
+            document.getElementById("welcome-view").classList.remove("hidden");
+            document.getElementById("student-name").value = "";
+        }
 
         function shuffleArray(array) {
             let currentIndex = array.length,
@@ -531,6 +566,7 @@
             studentAttempts = [];
             incorrectQuestionIds = [];
             currentMode = "first_attempt";
+            isExamActive = true;
 
             document.getElementById("quiz-title-tag").innerText = "امتحان النمذجة للهدفين أ و ب (المحاولة الأولى - 20 سؤالاً)";
             document.getElementById("header-badge").innerText = `الطالبة: ${studentName}`;
@@ -558,12 +594,12 @@
             activeQuestions.forEach((q, qIndex) => {
                 const card = document.createElement("div");
                 card.id = `question-card-${qIndex}`;
-                card.className = "bg-slate-900/50 border border-slate-800/80 rounded-2xl p-5 sm:p-6 space-y-4 shadow-lg transition-all hover:border-slate-700";
+                card.className = "bg-slate-900/50 border border-slate-800/80 rounded-2xl p-4 sm:p-6 space-y-4 shadow-lg transition-all hover:border-slate-700";
 
                 let optionsHtml = "";
                 q.options.forEach((opt, optIndex) => {
                     optionsHtml += `
-                        <label class="flex items-start space-x-3 space-x-reverse p-3.5 rounded-xl bg-slate-950/40 border border-slate-800/60 hover:bg-slate-900/80 hover:border-cyan-500/40 transition-all cursor-pointer group">
+                        <label class="flex items-start space-x-3 space-x-reverse p-3 sm:p-3.5 rounded-xl bg-slate-950/40 border border-slate-800/60 hover:bg-slate-900/80 hover:border-cyan-500/40 transition-all cursor-pointer group">
                             <input type="radio" name="question_${qIndex}" value="${optIndex}" class="mt-1 w-4 h-4 text-cyan-400 bg-slate-900 border-slate-700 shrink-0 focus:ring-cyan-400">
                             <span class="text-xs sm:text-sm text-slate-200 group-hover:text-white leading-relaxed">${opt.text}</span>
                         </label>
@@ -576,9 +612,9 @@
                         <span class="text-amber-400 bg-amber-500/10 px-3 py-1 rounded-lg border border-amber-500/20 font-bold">4 درجات</span>
                     </div>
                     <div>
-                        <h3 class="text-base sm:text-lg font-bold text-white leading-relaxed">${q.question}</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-white leading-relaxed">${q.question}</h3>
                     </div>
-                    <div class="space-y-2.5 pt-1">
+                    <div class="space-y-2 pt-1">
                         ${optionsHtml}
                     </div>
                 `;
@@ -603,12 +639,12 @@
 
                 if (!answered) {
                     hasUnanswered = true;
-                    card.className = "bg-rose-950/20 border-2 border-rose-500/80 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl shadow-rose-500/10 transition-all";
+                    card.className = "bg-rose-950/20 border-2 border-rose-500/80 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl shadow-rose-500/10 transition-all";
                     if (firstUnansweredIndex === -1) {
                         firstUnansweredIndex = i;
                     }
                 } else {
-                    card.className = "bg-slate-900/50 border border-slate-800/80 rounded-2xl p-5 sm:p-6 space-y-4 shadow-lg transition-all";
+                    card.className = "bg-slate-900/50 border border-slate-800/80 rounded-2xl p-4 sm:p-6 space-y-4 shadow-lg transition-all";
                 }
             }
 
@@ -622,6 +658,8 @@
                 }
                 return;
             }
+
+            isExamActive = false; // Turn off cheat detection during result screen
 
             if (currentMode === "first_attempt") {
                 let correctCount = 0;
@@ -767,6 +805,7 @@
 
         function startCorrectionRound() {
             currentMode = "correction_round";
+            isExamActive = true; // Re-enable cheat detection for correction round
             activeQuestions = originalQuestionsData.filter(q => incorrectQuestionIds.includes(q.id));
             shuffleArray(activeQuestions);
             activeQuestions.forEach(q => {
